@@ -1,3 +1,4 @@
 FirstProject.iml
 .idea/*
 out/*
+src/test/java/JenkinsTest/Test1.java

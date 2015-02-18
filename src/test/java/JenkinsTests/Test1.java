@@ -1,14 +1,13 @@
 package JenkinsTests;
 
-import JenkinsDashboard.HomePage;
-import JenkinsDashboard.LogInPage;
-import JenkinsDashboard.SignUpPage;
+import JenkinsDashboard.Pages.HomePage;
+import JenkinsDashboard.Pages.LogInPage;
+import JenkinsDashboard.Pages.SignUpPage;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.PageFactory;
 
 import java.util.concurrent.TimeUnit;
 
@@ -31,23 +30,20 @@ public class Test1 {
         driver.quit();
     }
 
+//    @Test
+//    public void SignUpTest() {
+//        HomePage homePage = new HomePage(driver);
+//        SignUpPage signUpPage = homePage.gotoSignUpPage();
+//        homePage = signUpPage.signUp();
+//        assertTrue(driver.getTitle().contains("Dashboard"));
+//    }
+//
     @Test
-    public void SignUpTest() {
-        HomePage homePage = new HomePage(driver);
-        SignUpPage signUpPage = homePage.gotoSignUpPage();
-        homePage = signUpPage.signUp();
-        assertTrue(driver.getTitle().contains("Dashboard"));
-    }
-
-    @Test
-    public void LogInTest()  {
+    public void LogInTest() throws InterruptedException {
         HomePage homePage = new HomePage(driver);
         LogInPage logInPage = homePage.gotoLogInPage();
-        homePage = logInPage.logIn();
+        homePage = logInPage.logIn("OleksandrA", "qwerty1234");
         assertTrue(driver.getTitle().contains("Dashboard"));
     }
-
-
-
 
 }
