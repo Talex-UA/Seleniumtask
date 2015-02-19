@@ -15,7 +15,6 @@ public class WrongLogInPage extends Page {
         PageFactory.initElements(wd, this);
     }
 
-    @Override
     public HomePage gotoHomePage() {
         JenkinsIcon.click();
         return new HomePage(wd);

@@ -24,8 +24,6 @@ public abstract class Page<T extends Page<T>> extends LoadableComponent<T> {
     @FindBy(id = "jenkins-home-link")
     WebElement JenkinsIcon;
 
-    public abstract HomePage gotoHomePage();
-
     public abstract String getPageURL();
 
     protected abstract void checkUniqueElements() throws Error;

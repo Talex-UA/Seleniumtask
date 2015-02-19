@@ -18,7 +18,6 @@ public class HomePage extends Page{
         PageFactory.initElements(wd, this);
     }
 
-    @Override
     public HomePage gotoHomePage() {
         JenkinsIcon.click();
         return new HomePage(wd);
@@ -43,8 +42,7 @@ public class HomePage extends Page{
     @FindBy(xpath = "//*[@id='header']/div[2]/a[2]")
     WebElement signUp;
 
-    @FindBy(xpath = "//*[@id='header']/div[2]/span/a[2]")
-    WebElement logOut;
+
 
     public SignUpPage gotoSignUpPage(){
         signUp.click();
@@ -56,8 +54,6 @@ public class HomePage extends Page{
         return new LogInPage(wd);
     }
 
-    public void logOut(){
-        logOut.click();
-    };
+
 
 }

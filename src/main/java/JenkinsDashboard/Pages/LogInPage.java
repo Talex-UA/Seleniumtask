@@ -14,7 +14,6 @@ public class LogInPage extends Page{
         PageFactory.initElements(wd, this);
     }
 
-    @Override
     public HomePage gotoHomePage() {
         JenkinsIcon.click();
         return new HomePage(wd);
@@ -40,11 +39,11 @@ public class LogInPage extends Page{
     WebElement logInButton;
 
 
-    public HomePage logIn(String USER_NAME, String PASSWORD){
+    public UserHomePage logIn(String USER_NAME, String PASSWORD){
         username.sendKeys(USER_NAME);
         password.sendKeys(PASSWORD);
         logInButton.click();
-        return new HomePage(wd);
+        return new UserHomePage(wd);
     }
 
     public WrongLogInPage logInWithWrongCredentials(String USER_NAME, String PASSWORD){

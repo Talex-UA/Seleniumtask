@@ -15,7 +15,6 @@ public class SignUpPage extends Page{
         PageFactory.initElements(wd, this);
     }
 
-    @Override
     public HomePage gotoHomePage() {
         JenkinsIcon.click();
         return new HomePage(wd);
@@ -57,7 +56,7 @@ public class SignUpPage extends Page{
     @FindBy (id = "jenkins-home-link")
     WebElement JenkinsIcon;
 
-    public HomePage signUpNewUser(String USER_NAME, String PASSWORD, String FULL_NAME, String EMAIL){
+    public UserHomePage signUpNewUser(String USER_NAME, String PASSWORD, String FULL_NAME, String EMAIL){
         username.sendKeys(USER_NAME);
         password.sendKeys(PASSWORD);
         confirm_password.sendKeys(PASSWORD);
@@ -65,7 +64,7 @@ public class SignUpPage extends Page{
         email.sendKeys(EMAIL);
         signUpButton.click();
         gotoTopPage.click();
-        return new HomePage(wd);
+        return new UserHomePage(wd);
     }
 
     public void signUpExistingNameUser(String USER_NAME, String PASSWORD, String FULL_NAME, String EMAIL){
