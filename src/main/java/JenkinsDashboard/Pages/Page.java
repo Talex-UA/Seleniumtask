@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -15,10 +16,12 @@ public abstract class Page<T extends Page<T>> extends LoadableComponent<T> {
     protected final Logger log = LogManager.getLogger(this);
     protected final WebDriver wd;
 
+
     public Page(WebDriver wd) {
         this.wd = wd;
         PageFactory.initElements(wd, this);
     }
+
 
 
     @FindBy(id = "jenkins-home-link")
@@ -39,4 +42,6 @@ public abstract class Page<T extends Page<T>> extends LoadableComponent<T> {
         Assert.assertThat("Wrong page URL", wd.getCurrentUrl(), Matchers.equalToIgnoringCase(getPageURL()));
         checkUniqueElements();
     }
+
+
 }

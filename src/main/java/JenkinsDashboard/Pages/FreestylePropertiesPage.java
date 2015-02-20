@@ -9,7 +9,7 @@ import org.openqa.selenium.support.PageFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FreestylePropertiesPage extends Page{
+public class FreestylePropertiesPage extends Page<FreestylePropertiesPage>{
 
     private final WebDriver wd;
 

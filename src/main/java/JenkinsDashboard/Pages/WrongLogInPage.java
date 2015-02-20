@@ -5,7 +5,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class WrongLogInPage extends Page {
+public class WrongLogInPage extends Page<WrongLogInPage> {
 
     private final WebDriver wd;
 
@@ -22,7 +22,7 @@ public class WrongLogInPage extends Page {
 
     @Override
     public String getPageURL() {
-        return null;
+        return "http://seltr-kbp1-1.synapse.com:8080/loginError";
     }
 
     @Override
@@ -33,9 +33,16 @@ public class WrongLogInPage extends Page {
     @FindBy (xpath = "//*[@id='main-panel-content']/div[1]/a")
     WebElement tryAgain;
 
+    @FindBy (id = "main-panel-content")
+    WebElement MainPanel;
+
     public LogInPage tryAgain(){
         tryAgain.click();
         return new LogInPage(wd);
+    }
+
+    public String getMainPanelText(){
+        return MainPanel.getText();
     }
 
 }

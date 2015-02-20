@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class UserHomePage extends Page {
+public class UserHomePage extends Page<UserHomePage> {
 
     private final WebDriver wd;
 
@@ -27,13 +27,12 @@ public class UserHomePage extends Page {
     @FindBy(xpath = "//*[@id='tasks']/div[1]/a[2]")
     WebElement newItem;
 
+    @FindBy (xpath = "//*[@id='header']/div[2]/span/a[1]/b")
+    WebElement UserName;
 
     @FindBys({ @FindBy(className = "model-link") })
     private List<WebElement> Projects;
 
-    public List<WebElement> getProjects(){
-        return Projects;
-    }
 
     @Override
     public String getPageURL() {
@@ -68,4 +67,17 @@ public class UserHomePage extends Page {
         }
         return new ProjectPage(wd);
     }
+
+    public String getUserName(){
+        return UserName.getText();
+    }
+
+    public List<String> getProjectsNames(){
+        List<String> projectNames = new ArrayList<>();
+        for (WebElement project:Projects){
+            projectNames.add(project.getText());
+        }
+        return projectNames;
+    }
+
 }

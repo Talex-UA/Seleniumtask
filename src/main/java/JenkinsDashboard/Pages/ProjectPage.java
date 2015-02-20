@@ -5,7 +5,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class ProjectPage extends Page{
+public class ProjectPage extends Page<ProjectPage>{
 
     private final WebDriver wd;
 
@@ -30,6 +30,9 @@ public class ProjectPage extends Page{
     @FindBy (xpath = "//*[@id='tasks']/div[1]/a[2]")
     WebElement BackToDashBoard;
 
+    @FindBy (id = "main-panel-content")
+    WebElement MainPanel;
+
     @Override
     public String getPageURL() {
         return null;
@@ -47,5 +50,9 @@ public class ProjectPage extends Page{
     public UserHomePage backToDashboard(){
         BackToDashBoard.click();
         return new UserHomePage(wd);
+    }
+
+    public String getMainPanelText(){
+        return MainPanel.getText();
     }
 }

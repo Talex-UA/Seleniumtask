@@ -5,7 +5,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class SignUpPage extends Page{
+public class SignUpPage extends Page<SignUpPage>{
 
     private final WebDriver wd;
 
@@ -22,7 +22,7 @@ public class SignUpPage extends Page{
 
     @Override
     public String getPageURL() {
-        return null;
+        return "http://seltr-kbp1-1.synapse.com:8080/signup";
     }
 
     @Override
@@ -51,10 +51,7 @@ public class SignUpPage extends Page{
     WebElement gotoTopPage;
 
     @FindBy (id = "main-panel-content")
-    WebElement SignUpPanel;
-
-    @FindBy (id = "jenkins-home-link")
-    WebElement JenkinsIcon;
+    WebElement MainPanel;
 
     public UserHomePage signUpNewUser(String USER_NAME, String PASSWORD, String FULL_NAME, String EMAIL){
         username.sendKeys(USER_NAME);
@@ -74,6 +71,10 @@ public class SignUpPage extends Page{
         fullname.sendKeys(FULL_NAME);
         email.sendKeys(EMAIL);
         signUpButton.click();
+    }
+
+    public String getMainPanelText(){
+        return MainPanel.getText();
     }
 
 }

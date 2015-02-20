@@ -5,7 +5,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class HomePage extends Page{
+public class HomePage extends Page<HomePage>{
 
     private final WebDriver wd;
 
@@ -13,7 +13,6 @@ public class HomePage extends Page{
 
     public HomePage(WebDriver wd){
         super(wd);
-        super.load();
         this.wd=wd;
         PageFactory.initElements(wd, this);
     }
