@@ -9,8 +9,8 @@
     <version>1.0</version>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!--<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>-->
+        <!--<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>-->
 
         <source.version>1.8</source.version>
         <target.version>1.8</target.version>
@@ -102,11 +102,11 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${compiler.plugin.version}</version>
                 <configuration>
-                    <useIncrementalCompilation>false</useIncrementalCompilation>
-                    <!-- http://stackoverflow.com/questions/2237803/can-i-obtain-method-parameter-name-using-java-reflection -->
-                    <compilerArguments>
-                        <parameters/>
-                    </compilerArguments>
+                    <!--<useIncrementalCompilation>false</useIncrementalCompilation>-->
+                    <!--&lt;!&ndash; http://stackoverflow.com/questions/2237803/can-i-obtain-method-parameter-name-using-java-reflection &ndash;&gt;-->
+                    <!--<compilerArguments>-->
+                        <!--<parameters/>-->
+                    <!--</compilerArguments>-->
                     <source>${source.version}</source>
                     <target>${target.version}</target>
                 </configuration>

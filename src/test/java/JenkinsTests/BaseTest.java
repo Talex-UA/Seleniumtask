@@ -36,8 +36,8 @@ import static junit.framework.TestCase.assertTrue;
 @RunWith(JUnit4.class)
 public class BaseTest {
 
-    protected final Logger log = LogManager.getLogger(this);
     protected static WebDriver wd = null;
+    protected final Logger log = LogManager.getLogger(this);
 
     @Rule
     public final TestName name = new TestName();

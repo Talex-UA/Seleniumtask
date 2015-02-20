@@ -5,10 +5,12 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class NewItemPage extends Page<NewItemPage>{
+/**
+    *This class is the same as NewItemPage, but extended from SecuredPage abstract class.
+ */
+public class SubPageSecured extends SecuredPage {
 
-
-    public NewItemPage(WebDriver wd) {
+    public SubPageSecured(WebDriver wd) {
         super(wd);
     }
 
@@ -23,7 +25,7 @@ public class NewItemPage extends Page<NewItemPage>{
 
     @Override
     public String getPageURL() {
-        return null;
+        return "http://seltr-kbp1-1.synapse.com:8080/view/All/newJob";
     }
 
     @Override
@@ -37,5 +39,4 @@ public class NewItemPage extends Page<NewItemPage>{
         oKbutton.click();
         return new FreestylePropertiesPage(wd);
     }
-
 }

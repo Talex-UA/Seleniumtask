@@ -1,56 +1,51 @@
 package JenkinsDashboard.Pages;
 
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
-import org.openqa.selenium.support.PageFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FreestylePropertiesPage extends Page<FreestylePropertiesPage>{
 
-    private final WebDriver wd;
+    @FindBy (xpath = "//*[@id='main-panel-content']/form/table/tbody/tr[3]/td[3]/textarea")
+    WebElement description;
+
+    @FindBy (id = "cb6")
+    WebElement discardOldBuilds;
+
+    @FindBy (id = "cb7")
+    WebElement thisBuildIsParameterized;
+
+    @FindBy (id = "cb8")
+    WebElement disableBuild;
+
+    @FindBy (id = "cb9")
+    WebElement executeConcurrentBuildsIfNecessary;
+
+    @FindBys({ @FindBy(className = "radio-block-control") })
+    private List<WebElement> sourceCodeManagement;
+
+    @FindBy (id = "cb18")
+    WebElement triggerBuildsRemotely;
+
+    @FindBy (id = "cb19")
+    WebElement buildAfterOtherProjectsAreBuilt;
+
+    @FindBy (id = "cb20")
+    WebElement buildPeriodically;
+
+    @FindBy (id = "cb21")
+    WebElement pollSCM;
+
+    @FindBy (id = "yui-gen30-button")
+    WebElement saveButton;
 
     public FreestylePropertiesPage(WebDriver wd) {
         super(wd);
-        this.wd=wd;
-        PageFactory.initElements(wd,this);
     }
-
-    @FindBy (xpath = "//*[@id='main-panel-content']/form/table/tbody/tr[3]/td[3]/textarea")
-    WebElement Description;
-
-    @FindBy (id = "cb6")
-    WebElement DiscardOldBuilds;
-
-    @FindBy (id = "cb7")
-    WebElement ThisBuildIsParameterized;
-
-    @FindBy (id = "cb8")
-    WebElement DisableBuild;
-
-    @FindBy (id = "cb9")
-    WebElement ExecuteConcurrentBuildsIfNecessary;
-
-    @FindBys({ @FindBy(className = "radio-block-control") })
-    private List<WebElement> SourceCodeManagement;
-
-    @FindBy (id = "cb18")
-    WebElement TriggerBuildsRemotely;
-
-    @FindBy (id = "cb19")
-    WebElement BuildAfterOtherProjectsAreBuilt;
-
-    @FindBy (id = "cb20")
-    WebElement BuildPeriodically;
-
-    @FindBy (id = "cb21")
-    WebElement PollSCM;
-
-    @FindBy (id = "yui-gen30-button")
-    WebElement SaveButton;
 
     @Override
     public String getPageURL() {
@@ -58,32 +53,32 @@ public class FreestylePropertiesPage extends Page<FreestylePropertiesPage>{
     }
 
     @Override
-    protected void checkUniqueElements() throws Error {
-
+    protected void checkUniqueElements() throws NoSuchElementException {
+        description.isDisplayed();
     }
 
     public void addDescription(String description){
-        Description.sendKeys(description);
+        this.description.sendKeys(description);
     }
 
     public void checkDiscardOldBuilds(){
-        if (!DiscardOldBuilds.isSelected()){
-            DiscardOldBuilds.click();
+        if (!discardOldBuilds.isSelected()){
+            discardOldBuilds.click();
         }
     }
     public void checkThisBuildIsParameterized(){
-        if (!ThisBuildIsParameterized.isSelected()){
-            ThisBuildIsParameterized.click();
+        if (!thisBuildIsParameterized.isSelected()){
+            thisBuildIsParameterized.click();
         }
     }
     public void checkDisableBuild(){
-        if (!DisableBuild.isSelected()){
-            DisableBuild.click();
+        if (!disableBuild.isSelected()){
+            disableBuild.click();
         }
     }
     public void checkExecuteConcurrentBuildsIfNecessary(){
-        if (!ExecuteConcurrentBuildsIfNecessary.isSelected()){
-            ExecuteConcurrentBuildsIfNecessary.click();
+        if (!executeConcurrentBuildsIfNecessary.isSelected()){
+            executeConcurrentBuildsIfNecessary.click();
         }
     }
 
@@ -96,34 +91,34 @@ public class FreestylePropertiesPage extends Page<FreestylePropertiesPage>{
      * <li>3 - Subversion</li>
      */
     public void setSourceCodeManagement(int index){
-        if(!SourceCodeManagement.get(index).isSelected()){
-            SourceCodeManagement.get(index).click();
+        if(!sourceCodeManagement.get(index).isSelected()){
+            sourceCodeManagement.get(index).click();
         }
     }
 
     public void checkTriggerBuildsRemotely(){
-        if (!TriggerBuildsRemotely.isSelected()){
-            TriggerBuildsRemotely.click();
+        if (!triggerBuildsRemotely.isSelected()){
+            triggerBuildsRemotely.click();
         }
     }
     public void checkBuildAfterOtherProjectsAreBuilt(){
-        if (!BuildAfterOtherProjectsAreBuilt.isSelected()){
-            BuildAfterOtherProjectsAreBuilt.click();
+        if (!buildAfterOtherProjectsAreBuilt.isSelected()){
+            buildAfterOtherProjectsAreBuilt.click();
         }
     }
     public void checkBuildPeriodically(){
-        if (!BuildPeriodically.isSelected()){
-            BuildPeriodically.click();
+        if (!buildPeriodically.isSelected()){
+            buildPeriodically.click();
         }
     }
     public void checkPollSCM(){
-        if (!PollSCM.isSelected()){
-            PollSCM.click();
+        if (!pollSCM.isSelected()){
+            pollSCM.click();
         }
     }
 
     public ProjectPage save(){
-        SaveButton.click();
+        saveButton.click();
         return new ProjectPage(wd);
     }
 }

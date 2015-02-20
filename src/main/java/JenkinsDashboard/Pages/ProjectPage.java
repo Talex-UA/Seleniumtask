@@ -1,19 +1,12 @@
 package JenkinsDashboard.Pages;
 
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 public class ProjectPage extends Page<ProjectPage>{
-
-    private final WebDriver wd;
-
-    public ProjectPage(WebDriver wd) {
-        super(wd);
-        this.wd=wd;
-        PageFactory.initElements(wd,this);
-    }
 
     @FindBy (xpath = "//*[@id='main-panel-content']/table/tbody/tr[1]/td[2]/a")
     WebElement Workspace;
@@ -33,14 +26,18 @@ public class ProjectPage extends Page<ProjectPage>{
     @FindBy (id = "main-panel-content")
     WebElement MainPanel;
 
+    public ProjectPage(WebDriver wd) {
+        super(wd);
+    }
+
     @Override
     public String getPageURL() {
         return null;
     }
 
     @Override
-    protected void checkUniqueElements() throws Error {
-
+    protected void checkUniqueElements() throws NoSuchElementException {
+        DisableProject.isDisplayed();
     }
 
     public void buildNow(){

@@ -1,22 +1,24 @@
 package JenkinsDashboard.Pages;
 
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 public class WrongLogInPage extends Page<WrongLogInPage> {
 
-    private final WebDriver wd;
+    @FindBy (xpath = "//*[@id='main-panel-content']/div[1]/a")
+    WebElement tryAgain;
+
+    @FindBy (id = "main-panel-content")
+    WebElement mainPanel;
 
     public WrongLogInPage(WebDriver wd) {
         super(wd);
-        this.wd=wd;
-        PageFactory.initElements(wd, this);
     }
 
     public HomePage gotoHomePage() {
-        JenkinsIcon.click();
+        jenkinsIcon.click();
         return new HomePage(wd);
     }
 
@@ -26,15 +28,10 @@ public class WrongLogInPage extends Page<WrongLogInPage> {
     }
 
     @Override
-    protected void checkUniqueElements() throws Error {
-
+    protected void checkUniqueElements() throws NoSuchElementException {
+        tryAgain.isDisplayed();
+        mainPanel.isDisplayed();
     }
-
-    @FindBy (xpath = "//*[@id='main-panel-content']/div[1]/a")
-    WebElement tryAgain;
-
-    @FindBy (id = "main-panel-content")
-    WebElement MainPanel;
 
     public LogInPage tryAgain(){
         tryAgain.click();
@@ -42,7 +39,7 @@ public class WrongLogInPage extends Page<WrongLogInPage> {
     }
 
     public String getMainPanelText(){
-        return MainPanel.getText();
+        return mainPanel.getText();
     }
 
 }
