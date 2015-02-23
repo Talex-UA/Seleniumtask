@@ -8,11 +8,15 @@ import org.openqa.selenium.support.PageFactory;
 
 public class HomePage extends Page<HomePage>{
 
-    private static final String PAGE_URL = "http://seltr-kbp1-1.synapse.com:8080/";
-
     public HomePage(WebDriver wd){
         super(wd);
     }
+
+    @FindBy(xpath = "//*[@id='header']/div[2]/a[1]")
+    WebElement logIn;
+
+    @FindBy(xpath = "//*[@id='header']/div[2]/a[2]")
+    WebElement signUp;
 
     public HomePage gotoHomePage() {
         jenkinsIcon.click();
@@ -29,14 +33,6 @@ public class HomePage extends Page<HomePage>{
         logIn.getAttribute("href").contains("login");
     }
 
-    @FindBy(xpath = "//*[@id='header']/div[2]/a[1]")
-    WebElement logIn;
-
-    @FindBy(xpath = "//*[@id='header']/div[2]/a[2]")
-    WebElement signUp;
-
-
-
     public SignUpPage gotoSignUpPage(){
         signUp.click();
         return new SignUpPage(wd);
@@ -46,7 +42,5 @@ public class HomePage extends Page<HomePage>{
         logIn.click();
         return new LogInPage(wd);
     }
-
-
 
 }

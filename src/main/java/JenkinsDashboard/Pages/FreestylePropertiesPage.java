@@ -8,7 +8,7 @@ import org.openqa.selenium.support.FindBys;
 
 import java.util.List;
 
-public class FreestylePropertiesPage extends Page<FreestylePropertiesPage>{
+public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage>{
 
     @FindBy (xpath = "//*[@id='main-panel-content']/form/table/tbody/tr[3]/td[3]/textarea")
     WebElement description;
@@ -49,7 +49,7 @@ public class FreestylePropertiesPage extends Page<FreestylePropertiesPage>{
 
     @Override
     public String getPageURL() {
-        return null;
+        return "http://seltr-kbp1-1.synapse.com:8080/job/"+getExistingProjectName()+"/configure";
     }
 
     @Override

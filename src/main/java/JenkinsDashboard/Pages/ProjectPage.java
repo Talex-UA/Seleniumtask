@@ -1,30 +1,36 @@
 package JenkinsDashboard.Pages;
 
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
-public class ProjectPage extends Page<ProjectPage>{
+public class ProjectPage extends SecuredPage<ProjectPage> {
 
-    @FindBy (xpath = "//*[@id='main-panel-content']/table/tbody/tr[1]/td[2]/a")
+    @FindBy(xpath = "//*[@id='main-panel-content']/table/tbody/tr[1]/td[2]/a")
     WebElement Workspace;
 
-    @FindBy (xpath = "//*[@id='main-panel-content']/table/tbody/tr[2]/td[2]/a")
+    @FindBy(xpath = "//*[@id='main-panel-content']/table/tbody/tr[2]/td[2]/a")
     WebElement RecentChanges;
 
     @FindBy(id = "yui-gen1-button")
-    WebElement DisableProject;
+    WebElement disableProject;
 
-    @FindBy (xpath = "//*[@id='tasks']/div[5]/a[2]")
-    WebElement BuildNow;
+    @FindBy(xpath = "//*[@id='tasks']/div[5]/a[2]")
+    WebElement buildNow;
 
-    @FindBy (xpath = "//*[@id='tasks']/div[1]/a[2]")
-    WebElement BackToDashBoard;
+    @FindBy(xpath = "//*[@id='tasks']/div[1]/a[2]")
+    WebElement backToDashBoard;
 
-    @FindBy (id = "main-panel-content")
-    WebElement MainPanel;
+    @FindBy(id = "main-panel-content")
+    WebElement mainPanel;
+
+    @FindBy(xpath = "//*[@id='tasks']/div[5]/a[2]")
+    WebElement removeButtonifDisabled;
+
+    @FindBy(xpath = "//*[@id='tasks']/div[6]/a[2]")
+    WebElement removeButtonifEnabled;
 
     public ProjectPage(WebDriver wd) {
         super(wd);
@@ -32,24 +38,37 @@ public class ProjectPage extends Page<ProjectPage>{
 
     @Override
     public String getPageURL() {
-        return null;
+        return "http://seltr-kbp1-1.synapse.com:8080/job/" + getExistingProjectName() + "/";
     }
 
     @Override
     protected void checkUniqueElements() throws NoSuchElementException {
-        DisableProject.isDisplayed();
+        disableProject.isDisplayed();
     }
 
-    public void buildNow(){
-        BuildNow.click();
+    public void buildNow() {
+        buildNow.click();
     }
 
-    public UserHomePage backToDashboard(){
-        BackToDashBoard.click();
+    public UserHomePage backToDashboard() {
+        backToDashBoard.click();
         return new UserHomePage(wd);
     }
 
-    public String getMainPanelText(){
-        return MainPanel.getText();
+    public String getMainPanelText() {
+        return mainPanel.getText();
+    }
+
+    public UserHomePage deleteProject() {
+        if (isDisabled()){
+            removeButtonifDisabled.click();
+        } else removeButtonifEnabled.click();
+        Alert alert = wd.switchTo().alert();
+        alert.accept();
+        return new UserHomePage(wd);
+    }
+
+    private boolean isDisabled() {
+        return getMainPanelText().contains("This project is currently disabled");
     }
 }

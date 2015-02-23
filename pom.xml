@@ -95,7 +95,16 @@
                         <lang>en</lang>
                         <log4j.configurationFile>file:///${basedir}/log4j.xml</log4j.configurationFile>
                     </systemPropertyVariables>
+                    <test>MyTests</test>
                 </configuration>
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>default-test</id>-->
+                        <!--<configuration>-->
+                            <!--<skip>true</skip>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                <!--</executions>-->
             </plugin>
 
             <plugin>

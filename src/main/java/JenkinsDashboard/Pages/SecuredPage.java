@@ -2,10 +2,23 @@ package JenkinsDashboard.Pages;
 
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.LoadableComponent;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 
-public abstract class SecuredPage extends Page<SecuredPage> implements Generators{
+public abstract class SecuredPage <T extends SecuredPage<T>>extends Page<T> implements Generators{
+
+    @FindBy (name = "j_username")
+    WebElement username;
+
+    @FindBy (name = "j_password")
+    WebElement password;
+
+    @FindBy (id="yui-gen1-button")
+    WebElement logInButton;
+
+    @FindBy(xpath = "//*[@id='header']/div[2]/a[1]")
+    WebElement logIn;
 
     public SecuredPage(WebDriver wd) {
         super(wd);
@@ -13,26 +26,16 @@ public abstract class SecuredPage extends Page<SecuredPage> implements Generator
 
     @Override
     protected void load() {
-        if (isLoggedIn()){
-            super.load();
-        } else {
+        super.load();
+        if (!isLoggedIn()) {
             login();
-            super.load();
         }
     }
 
-    @Override
-    protected void isLoaded() throws NoSuchElementException {
-        try {
-            super.isLoaded();
-        } catch (AssertionError e){
-
-        }
-    }
-
-
-    private void login() {
-        LogInPage logInPage = new LogInPage(wd);
-        UserHomePage userHomePage = logInPage.logIn(getExistingUserName(), getPassword());
+    protected void login() {
+        logIn.click();
+        username.sendKeys(getExistingUserName());
+        password.sendKeys(getPassword());
+        logInButton.click();
     }
 }

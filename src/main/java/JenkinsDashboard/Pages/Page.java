@@ -37,11 +37,6 @@ public abstract class Page<T extends Page<T>> extends LoadableComponent<T> {
             return logOut.getAttribute("href").contains("logout");
         } catch (NoSuchElementException e){}
         return false;
-//        try {
-//            return !logOut.isDisplayed();
-//        }
-//        catch (NoSuchElementException e) {}
-//        return true;
     }
 
     /**

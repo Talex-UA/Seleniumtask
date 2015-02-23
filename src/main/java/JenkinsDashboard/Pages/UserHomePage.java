@@ -4,19 +4,21 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
-import org.openqa.selenium.support.PageFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserHomePage extends Page<UserHomePage> {
+public class UserHomePage extends SecuredPage<UserHomePage> {
+
+    private UserHomePage userHomePage;
+    private ProjectPage projectPage;
+    private PeoplePage peoplePage;
 
     @FindBy(xpath = "//*[@id='tasks']/div[1]/a[2]")
     WebElement newItem;
 
     @FindBy(xpath = "//*[@id='header']/div[2]/span/a[1]/b")
     WebElement userName;
-
     @FindBys({@FindBy(className = "model-link")})
     List<WebElement> projects;
 
@@ -26,7 +28,7 @@ public class UserHomePage extends Page<UserHomePage> {
 
     @Override
     public String getPageURL() {
-        return null;
+            return "http://seltr-kbp1-1.synapse.com:8080/";
     }
 
     @Override
@@ -66,6 +68,30 @@ public class UserHomePage extends Page<UserHomePage> {
             projectNames.add(project.getText());
         }
         return projectNames;
+    }
+
+    public List<String> getProjectsNamesByTemplate(String template){
+        List<String> projectNames = new ArrayList<>();
+        for (WebElement project : projects) {
+            if (project.getText().contains(template)){
+                projectNames.add(project.getText());
+            }
+        }
+        return projectNames;
+    }
+
+    public void deleteTestProjects() {
+        List<String> projects = getProjectsNamesByTemplate("Test-Project ");
+        for (String project : projects) {
+            projectPage = openProject(project);
+            userHomePage = projectPage.deleteProject();
+            System.out.println("Project Deleted: " + project);
+        }
+    }
+
+    public void deleteTestUsers(){
+        peoplePage = new PeoplePage(wd).get();
+        peoplePage.deleteTestUsers();
     }
 
 }

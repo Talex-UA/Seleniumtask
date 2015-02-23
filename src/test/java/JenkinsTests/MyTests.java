@@ -1,25 +1,25 @@
 package JenkinsTests;
 
 import JenkinsDashboard.Pages.*;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import static junit.framework.TestCase.assertTrue;
 
+@RunWith(JUnit4.class)
 public class MyTests extends BaseTest implements Generators {
 
-    private static final String PASSWORD = "qwerty1234";
-    public static final String EXISTING_USER_NAME = "OleksandrA";
-    private static final String EXISTING_USER_FULL_NAME = "Alexander Agafonov";
-    private static final String EXISTING_PROJECT_NAME = "ExistingProject";
+    private String existingUserName = getExistingUserName();
+    private String existingUserFulName= getExistingUserFulName();
+    private String existingProjectName = getExistingProjectName();
+    private String password = getPassword();
 
     private String newUserName= generateNewUserName();
     private String newUserFullName=generateNewUserFullName();
     private String newUserEmail=generateNewUserEmail();
     private String newProjectName=generateNewProjectName();
     private String newProjectDescription=generateNewProjectDescription();
-
 
     private LogInPage loginPage;
 
@@ -33,11 +33,22 @@ public class MyTests extends BaseTest implements Generators {
         loginPage.logOut();
     }
 
+//    Uncomment @AfterClass in BaseTest in case you don't use further code.
+    @AfterClass
+    public static void afterClass() {
+        UserHomePage userHomePage = new UserHomePage(wd).get();
+        userHomePage.deleteTestProjects();
+        userHomePage.deleteTestUsers();
+        if (wd != null) {
+            wd.quit();
+        }
+    }
+
     @Test
     public void LogInTest() {
         loginPage.get();
-        UserHomePage userHomePage = loginPage.logIn(EXISTING_USER_NAME, PASSWORD);
-        assertTrue(userHomePage.getUserName().contains(EXISTING_USER_FULL_NAME));
+        UserHomePage userHomePage = loginPage.logIn(existingUserName, password);
+        assertTrue(userHomePage.getUserName().contains(existingUserFulName));
     }
 
     @Test
@@ -50,35 +61,33 @@ public class MyTests extends BaseTest implements Generators {
     @Test
     public void SignUpNewUserTest() {
         SignUpPage signUpPage = new SignUpPage(wd).get();
-        UserHomePage userHomePage = signUpPage.signUpNewUser(newUserName, PASSWORD, newUserFullName, newUserEmail);
+        UserHomePage userHomePage = signUpPage.signUpNewUser(newUserName, password, newUserFullName, newUserEmail);
+        assertTrue(userHomePage.getUserName().contains(newUserFullName));
     }
 
     @Test
     public void SignUpExistingNameUser() {
         SignUpPage signUpPage = new SignUpPage(wd).get();
-        signUpPage.signUpExistingNameUser(EXISTING_USER_NAME, PASSWORD, newUserFullName, newUserEmail);
+        signUpPage.signUpExistingNameUser(existingUserName, password, newUserFullName, newUserEmail);
         assertTrue(signUpPage.getMainPanelText().contains("User name is already taken"));
     }
 
     @Test
     public void openExistingProject() {
-        LogInPage logInPage = new LogInPage(wd).get();
-        UserHomePage userHomePage = logInPage.logIn(EXISTING_USER_NAME, PASSWORD);
-        ProjectPage projectPage = userHomePage.openProject(EXISTING_PROJECT_NAME);
-        assertTrue(projectPage.getMainPanelText().contains(EXISTING_PROJECT_NAME));
+        UserHomePage userHomePage = new UserHomePage(wd).get();
+        ProjectPage projectPage = userHomePage.openProject(existingProjectName);
+        assertTrue(projectPage.getMainPanelText().contains(existingProjectName));
         userHomePage = projectPage.backToDashboard();
     }
 
     @Test
-    public void createNewProject() {
-        LogInPage logInPage = new LogInPage(wd).get();
-        UserHomePage userHomePage = logInPage.logIn(EXISTING_USER_NAME, PASSWORD);
-        NewItemPage newItemPage = userHomePage.createNewItem();
+    public void newProjectTest() {
+        NewItemPage newItemPage =  new NewItemPage(wd).get();
         FreestylePropertiesPage freestylePropertiesPage = newItemPage.setFreestyleProject(newProjectName);
         freestylePropertiesPage.addDescription(newProjectDescription);
         ProjectPage projectPage = freestylePropertiesPage.save();
         projectPage.buildNow();
-        userHomePage = projectPage.backToDashboard();
+        UserHomePage userHomePage = projectPage.backToDashboard();
 
         boolean projectfound = false;
         for (String currentProject : userHomePage.getProjectsNames()) {
@@ -88,12 +97,6 @@ public class MyTests extends BaseTest implements Generators {
             }
         }
         assertTrue(projectfound);
-    }
-
-    @Test
-    public void SubPageTest() throws InterruptedException {
-        SubPageSecured subPageSecured = (SubPageSecured) new SubPageSecured(wd).get();
-        Thread.sleep(5000);
     }
 
 }
