@@ -10,13 +10,14 @@ import java.util.List;
 
 public class PeoplePage extends SecuredPage<PeoplePage> {
 
+    private UserPage userPage;
+    private PeoplePage peoplePage;
+
     @FindBys({@FindBy(xpath = "//td[2]/a")})
     List<WebElement> people;
 
     @FindBy(id = "main-panel-content")
     WebElement mainPanel;
-    private UserPage userPage;
-    private PeoplePage peoplePage;
 
     public PeoplePage(WebDriver wd) {
         super(wd);

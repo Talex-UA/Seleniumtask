@@ -5,6 +5,9 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.FindBys;
+
+import java.util.List;
 
 public class ProjectPage extends SecuredPage<ProjectPage> {
 
@@ -32,6 +35,9 @@ public class ProjectPage extends SecuredPage<ProjectPage> {
     @FindBy(xpath = "//*[@id='tasks']/div[6]/a[2]")
     WebElement removeButtonifEnabled;
 
+    @FindBys({@FindBy(className = "zws-inserted")})
+    List<WebElement> builds;
+
     public ProjectPage(WebDriver wd) {
         super(wd);
     }
@@ -46,8 +52,18 @@ public class ProjectPage extends SecuredPage<ProjectPage> {
         disableProject.isDisplayed();
     }
 
-    public void buildNow() {
+    public ProjectPage buildProject(){
+        int before = builds.size();
         buildNow.click();
+        int after = builds.size();
+        while (after-before!=1) {
+            try {
+                Thread.sleep(500);
+            }
+            catch (InterruptedException e){}
+            after=builds.size();
+        }
+        return new ProjectPage(wd);
     }
 
     public UserHomePage backToDashboard() {
@@ -70,5 +86,11 @@ public class ProjectPage extends SecuredPage<ProjectPage> {
 
     private boolean isDisabled() {
         return getMainPanelText().contains("This project is currently disabled");
+    }
+
+    public BuildsPage openLatestBuild(){
+        System.out.println(builds.get(0).getText());
+        builds.get(0).click();
+        return new BuildsPage(wd);
     }
 }

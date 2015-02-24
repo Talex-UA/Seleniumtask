@@ -105,12 +105,12 @@ public class BaseTest {
         wd = WebDriverController.getDriver();
     }
 
-//    @AfterClass
-//    public static void afterClass() {
-//        if (wd != null) {
-//            wd.quit();
-//        }
-//    }
+    @AfterClass
+    public static void afterClass() {
+        if (wd != null) {
+            wd.quit();
+        }
+    }
 
     protected void takeScreenshot(@Nullable String name) {
         File file = ((TakesScreenshot) wd).getScreenshotAs(OutputType.FILE);

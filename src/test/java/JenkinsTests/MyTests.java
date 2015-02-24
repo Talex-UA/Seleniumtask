@@ -33,15 +33,11 @@ public class MyTests extends BaseTest implements Generators {
         loginPage.logOut();
     }
 
-//    Uncomment @AfterClass in BaseTest in case you don't use further code.
     @AfterClass
-    public static void afterClass() {
+    public static void afterCurrentClass() {
         UserHomePage userHomePage = new UserHomePage(wd).get();
         userHomePage.deleteTestProjects();
         userHomePage.deleteTestUsers();
-        if (wd != null) {
-            wd.quit();
-        }
     }
 
     @Test
@@ -86,7 +82,7 @@ public class MyTests extends BaseTest implements Generators {
         FreestylePropertiesPage freestylePropertiesPage = newItemPage.setFreestyleProject(newProjectName);
         freestylePropertiesPage.addDescription(newProjectDescription);
         ProjectPage projectPage = freestylePropertiesPage.save();
-        projectPage.buildNow();
+
         UserHomePage userHomePage = projectPage.backToDashboard();
 
         boolean projectfound = false;
@@ -97,6 +93,14 @@ public class MyTests extends BaseTest implements Generators {
             }
         }
         assertTrue(projectfound);
+    }
+
+    @Test
+    public void buildExisting(){
+        ProjectPage projectPage=new ProjectPage(wd).get();
+        projectPage.buildProject();
+        BuildsPage buildsPage=projectPage.openLatestBuild();
+        assertTrue (buildsPage.getConsoleOutputText().contains("SUCCESS"));
     }
 
 }
