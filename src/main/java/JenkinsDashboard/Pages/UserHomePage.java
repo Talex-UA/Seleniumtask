@@ -88,7 +88,6 @@ public class UserHomePage extends SecuredPage<UserHomePage> {
         for (String project : projects) {
             projectPage = openProject(project);
             userHomePage = projectPage.deleteProject();
-            System.out.println("Project Deleted: " + project);
         }
     }
 

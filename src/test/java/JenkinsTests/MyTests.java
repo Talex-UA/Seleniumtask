@@ -5,8 +5,14 @@ import org.hamcrest.Matchers;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.SearchContext;
+import org.openqa.selenium.WebElement;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -117,5 +123,12 @@ public class MyTests extends BaseTest implements Generators {
     public void testProjectSearch(){
         HomePage homePage = new HomePage(wd).get();
         ProjectPage projectPage = homePage.searchForProject("Exis");
+    }
+
+    @Test
+    public void testPeopleSearch(){
+        PeoplePage peoplePage = new PeoplePage(wd).get();
+        peoplePage.deleteTestUsers();
+        System.out.println(" ");
     }
 }

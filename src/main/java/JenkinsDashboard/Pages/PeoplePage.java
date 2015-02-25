@@ -6,14 +6,15 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
+import org.openqa.selenium.support.PageFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PeoplePage extends SecuredPage<PeoplePage> {
 
-    private UserPage userPage;
-    private PeoplePage peoplePage;
+//    private UserPage userPage;
+//    private PeoplePage peoplePage;
 
     @FindBys({@FindBy(id = "User-ID" )}) // this ID is given to needed elements by givePeopleElementsID method. original locators: css = "#people td:nth-of-type(2)>a"   xpath = "//td[2]/a"
     List<WebElement> people;
@@ -50,11 +51,11 @@ public class PeoplePage extends SecuredPage<PeoplePage> {
     }
 
     public List<String> getPeopleNames() {
-        List<String> projectNames = new ArrayList<>();
+        List<String> peopleNames = new ArrayList<>();
         for (WebElement project : people) {
-            projectNames.add(project.getText());
+            peopleNames.add(project.getText());
         }
-        return projectNames;
+        return peopleNames;
     }
 
     public List<String> getPeopleNameByTemplate(String template){
@@ -70,8 +71,9 @@ public class PeoplePage extends SecuredPage<PeoplePage> {
     public void deleteTestUsers() {
         List<String> names = getPeopleNameByTemplate("Test-Name ");
         for (String currentUser : names) {
-            userPage = openUser(currentUser);
-            peoplePage = userPage.deleteUserAndReturnToPeoplePage();
+            openUser(currentUser).deleteUserAndReturnToPeoplePage();
+            givePeopleElementsID();
+            PageFactory.initElements(wd,this);
         }
     }
 

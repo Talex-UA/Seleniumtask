@@ -1,6 +1,8 @@
 package utils.web;
 
+import org.openqa.selenium.support.events.EventFiringWebDriver;
 import utils.Browser;
+import utils.Highlighter;
 import utils.Language;
 import utils.OSUtils;
 import org.apache.logging.log4j.LogManager;
@@ -108,10 +110,16 @@ public final class WebDriverController {
         log.debug("Going to start Browser: {}", browser);
         WebDriver wd = getWebDriver(browser);
 
+
         wd.manage().timeouts().pageLoadTimeout(DEFAULT_TIMEOUT_SEC, TimeUnit.SECONDS);
         wd.manage().timeouts().setScriptTimeout(DEFAULT_TIMEOUT_SEC, TimeUnit.SECONDS); //for async JavaScript
 //        wd.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         wd.manage().window().maximize();
+        if (Highlighter.getHighlighter().toString().equals("ON")){
+            EventFiringWebDriver driver = new EventFiringWebDriver(wd);
+            driver.register(new ListenerThatHiglilightsElements());
+            return driver;
+        }
         return wd;
     }
 }
