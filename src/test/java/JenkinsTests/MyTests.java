@@ -1,11 +1,13 @@
 package JenkinsTests;
 
 import JenkinsDashboard.Pages.*;
+import org.hamcrest.Matchers;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import static junit.framework.TestCase.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith(JUnit4.class)
 public class MyTests extends BaseTest implements Generators {
@@ -51,7 +53,7 @@ public class MyTests extends BaseTest implements Generators {
     public void LogInWrongCredentials() {
         LogInPage logInPage = new LogInPage(wd).get();
         WrongLogInPage wrongLogInPage = logInPage.logInWithWrongCredentials("asfaf", "segwf");
-        assertTrue(wrongLogInPage.getMainPanelText().contains("Invalid login information. Please try again."));
+        assertTrue(wrongLogInPage.checkForError());
     }
 
     @Test
@@ -65,14 +67,14 @@ public class MyTests extends BaseTest implements Generators {
     public void SignUpExistingNameUser() {
         SignUpPage signUpPage = new SignUpPage(wd).get();
         signUpPage.signUpExistingNameUser(existingUserName, password, newUserFullName, newUserEmail);
-        assertTrue(signUpPage.getMainPanelText().contains("User name is already taken"));
+        assertTrue(signUpPage.checkForError());
     }
 
     @Test
     public void openExistingProject() {
         UserHomePage userHomePage = new UserHomePage(wd).get();
         ProjectPage projectPage = userHomePage.openProject(existingProjectName);
-        assertTrue(projectPage.getMainPanelText().contains(existingProjectName));
+        assertThat("Project not found",projectPage.getMainPanelText(), Matchers.containsString(existingProjectName));
         userHomePage = projectPage.backToDashboard();
     }
 
@@ -101,6 +103,18 @@ public class MyTests extends BaseTest implements Generators {
         projectPage.buildProject();
         BuildsPage buildsPage=projectPage.openLatestBuild();
         assertTrue (buildsPage.getConsoleOutputText().contains("SUCCESS"));
+    }
+
+    @Test
+    public void searchExistingProject(){
+        ProjectPage projectPage = new ProjectPage(wd).get().searchForString(existingProjectName);
+        System.out.println(" ");
+    }
+
+    @Test
+    public void searchOlegUser(){
+        UserPage userPage=new UserPage(wd).get().searchForString("Vlad","Vladyslav");
+        System.out.println(" ");
     }
 
 }

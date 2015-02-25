@@ -14,10 +14,13 @@ public class UserHomePage extends SecuredPage<UserHomePage> {
     private ProjectPage projectPage;
     private PeoplePage peoplePage;
 
-    @FindBy(xpath = "//*[@id='tasks']/div[1]/a[2]")
+    @FindBy(css = ".icon-new-package.icon-md") // css = ".icon-new-package.icon-md"    xpath = "//*[@id='tasks']/div[1]/a[2]"
     WebElement newItem;
 
-    @FindBy(xpath = "//*[@id='header']/div[2]/span/a[1]/b")
+    @FindBy (css = ".icon-user.icon-md") // css = ".icon-user.icon-md"  xpath = "//*[@id='tasks']/div[2]/a[2]"
+    WebElement PeoplePage;
+
+    @FindBy(css = ".model-link.inside.inverse>b") // css = ".model-link.inside.inverse>b"     xpath = "//*[@id='header']/div[2]/span/a[1]/b"
     WebElement userName;
     @FindBys({@FindBy(className = "model-link")})
     List<WebElement> projects;

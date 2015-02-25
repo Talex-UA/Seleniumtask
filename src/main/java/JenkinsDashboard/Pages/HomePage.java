@@ -12,10 +12,10 @@ public class HomePage extends Page<HomePage>{
         super(wd);
     }
 
-    @FindBy(xpath = "//*[@id='header']/div[2]/a[1]")
+    @FindBy(css = ".login>a[href*=login]") // css = ".login>a[href*=login]" xpath = "//*[@id='header']/div[2]/a[1]"
     WebElement logIn;
 
-    @FindBy(xpath = "//*[@id='header']/div[2]/a[2]")
+    @FindBy(css = ".login>a[href*=signup]") // css = ".login>a[href*=signup]" xpath = "//*[@id='header']/div[2]/a[2]"
     WebElement signUp;
 
     public HomePage gotoHomePage() {

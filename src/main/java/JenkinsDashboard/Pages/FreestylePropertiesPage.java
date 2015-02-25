@@ -10,7 +10,7 @@ import java.util.List;
 
 public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage>{
 
-    @FindBy (xpath = "//*[@id='main-panel-content']/form/table/tbody/tr[3]/td[3]/textarea")
+    @FindBy (css = "#main-panel-content>form>table>tbody>tr>td>textarea") // css = "#main-panel-content>form>table>tbody>tr>td>textarea" xpath = "//*[@id='main-panel-content']/form/table/tbody/tr[3]/td[3]/textarea"
     WebElement description;
 
     @FindBy (id = "cb6")

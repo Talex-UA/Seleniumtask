@@ -6,7 +6,7 @@ import org.openqa.selenium.support.FindBy;
 
 public class BuildsPage extends SecuredPage<BuildsPage>{
 
-    @FindBy (xpath = "//*[@id='tasks']/div[4]/a[2]")
+    @FindBy (css = ".icon-terminal.icon-md") //css = ".icon-terminal.icon-md"   xpath = "//*[@id='tasks']/div[4]/a[2]"
     WebElement consoleOutput;
 
     @FindBy (className = "console-output")

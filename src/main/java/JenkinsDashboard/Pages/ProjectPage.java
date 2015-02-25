@@ -11,29 +11,26 @@ import java.util.List;
 
 public class ProjectPage extends SecuredPage<ProjectPage> {
 
-    @FindBy(xpath = "//*[@id='main-panel-content']/table/tbody/tr[1]/td[2]/a")
+    @FindBy(css = "#main-panel-content [href*=ws]" ) // css = "#main-panel-content  [href*=ws]"   xpath = "//*[@id='main-panel-content']/table/tbody/tr[1]/td[2]/a"
     WebElement Workspace;
 
-    @FindBy(xpath = "//*[@id='main-panel-content']/table/tbody/tr[2]/td[2]/a")
+    @FindBy(css = "#main-panel-content [href*=changes]")// css = "#main-panel-content  [href*=changes]"   xpath = "//*[@id='main-panel-content']/table/tbody/tr[2]/td[2]/a"
     WebElement RecentChanges;
 
     @FindBy(id = "yui-gen1-button")
     WebElement disableProject;
 
-    @FindBy(xpath = "//*[@id='tasks']/div[5]/a[2]")
+    @FindBy(css = ".icon-clock.icon-md") // css = ".icon-clock.icon-md" xpath = "//*[@id='tasks']/div[5]/a[2]"
     WebElement buildNow;
 
-    @FindBy(xpath = "//*[@id='tasks']/div[1]/a[2]")
+    @FindBy(css = ".icon-up.icon-md") // css = ".icon-up.icon-md"  xpath = "//*[@id='tasks']/div[1]/a[2]"
     WebElement backToDashBoard;
 
     @FindBy(id = "main-panel-content")
     WebElement mainPanel;
 
-    @FindBy(xpath = "//*[@id='tasks']/div[5]/a[2]")
-    WebElement removeButtonifDisabled;
-
-    @FindBy(xpath = "//*[@id='tasks']/div[6]/a[2]")
-    WebElement removeButtonifEnabled;
+    @FindBy(css = ".icon-edit-delete.icon-md")
+    WebElement removeButton;
 
     @FindBys({@FindBy(className = "zws-inserted")})
     List<WebElement> builds;
@@ -76,16 +73,10 @@ public class ProjectPage extends SecuredPage<ProjectPage> {
     }
 
     public UserHomePage deleteProject() {
-        if (isDisabled()){
-            removeButtonifDisabled.click();
-        } else removeButtonifEnabled.click();
+        removeButton.click();
         Alert alert = wd.switchTo().alert();
         alert.accept();
         return new UserHomePage(wd);
-    }
-
-    private boolean isDisabled() {
-        return getMainPanelText().contains("This project is currently disabled");
     }
 
     public BuildsPage openLatestBuild(){

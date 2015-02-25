@@ -9,10 +9,10 @@ public class UserPage extends SecuredPage<UserPage>{
     @FindBy (id="yui-gen1-button")
     WebElement yesButton;
 
-    @FindBy (xpath = "//*[@id='tasks']/div[6]/a[2]")
+    @FindBy (css = ".icon-edit-delete.icon-md") // css = ".icon-edit-delete.icon-md"   xpath = "//*[@id='tasks']/div[6]/a[2]"
     WebElement deleteUser;
 
-    @FindBy (xpath = "//*[@id='tasks']/div[2]/a[2]")
+    @FindBy (css = ".icon-user.icon-md") // css = ".icon-user.icon-md"  xpath = "//*[@id='tasks']/div[2]/a[2]"
     WebElement goToPeoplePage;
 
     public UserPage(WebDriver wd) {

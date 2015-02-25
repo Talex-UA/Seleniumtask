@@ -17,7 +17,7 @@ public abstract class SecuredPage <T extends SecuredPage<T>>extends Page<T> impl
     @FindBy (id="yui-gen1-button")
     WebElement logInButton;
 
-    @FindBy(xpath = "//*[@id='header']/div[2]/a[1]")
+    @FindBy(css = ".login>a[href*=login]")
     WebElement logIn;
 
     public SecuredPage(WebDriver wd) {

@@ -17,7 +17,7 @@ public class NewItemPage extends SecuredPage<NewItemPage> {
     @FindBy (id = "name")
     WebElement itemName;
 
-    @FindBy (xpath = "//*[@id='main-panel-content']/form/table/tbody/tr[3]/td/input")
+    @FindBy (css = "input[type='radio'][value*=FreeStyleProject]" ) // css = "input[type='radio'][value*=FreeStyleProject]"   xpath = "//*[@id='main-panel-content']/form/table/tbody/tr[3]/td/input"
     WebElement freestyleProject;
 
     @FindBy (id = "ok-button")

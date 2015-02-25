@@ -25,11 +25,14 @@ public class SignUpPage extends Page<SignUpPage>{
     @FindBy (id = "yui-gen1-button")
     WebElement signUpButton;
 
-    @FindBy (xpath = "//*[@id='main-panel-content']/div/a")
+    @FindBy (css = "#main-panel-content>div>a") // css = "#main-panel-content>div>a"    xpath = "//*[@id='main-panel-content']/div/a"
     WebElement gotoTopPage;
 
     @FindBy (id = "main-panel-content")
     WebElement mainPanel;
+
+    @FindBy (className = "error")
+    WebElement errorMessage;
 
     public SignUpPage(WebDriver wd){
         super(wd);
@@ -74,4 +77,7 @@ public class SignUpPage extends Page<SignUpPage>{
         return mainPanel.getText();
     }
 
+    public boolean checkForError(){
+        return errorMessage.isDisplayed();
+    }
 }

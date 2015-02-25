@@ -7,7 +7,7 @@ import org.openqa.selenium.support.FindBy;
 
 public class WrongLogInPage extends Page<WrongLogInPage> {
 
-    @FindBy (xpath = "//*[@id='main-panel-content']/div[1]/a")
+    @FindBy (css = "#main-panel-content>div>a")
     WebElement tryAgain;
 
     @FindBy (id = "main-panel-content")
@@ -40,6 +40,10 @@ public class WrongLogInPage extends Page<WrongLogInPage> {
 
     public String getMainPanelText(){
         return mainPanel.getText();
+    }
+
+    public boolean checkForError(){
+        return tryAgain.getAttribute("href").contains("login?from");
     }
 
 }
