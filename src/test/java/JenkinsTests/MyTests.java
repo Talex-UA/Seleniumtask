@@ -6,6 +6,8 @@ import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.util.Arrays;
+
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -102,19 +104,18 @@ public class MyTests extends BaseTest implements Generators {
         ProjectPage projectPage=new ProjectPage(wd).get();
         projectPage.buildProject();
         BuildsPage buildsPage=projectPage.openLatestBuild();
-        assertTrue (buildsPage.getConsoleOutputText().contains("SUCCESS"));
+        assertTrue(buildsPage.getConsoleOutputText().contains("SUCCESS"));
     }
 
     @Test
-    public void searchExistingProject(){
-        ProjectPage projectPage = new ProjectPage(wd).get().searchForString(existingProjectName);
-        System.out.println(" ");
+    public void testSearch() {
+        Arrays.stream(new HomePage(wd).get().search("Exis"))
+                .forEach(System.out::println);
     }
 
     @Test
-    public void searchOlegUser(){
-        UserPage userPage=new UserPage(wd).get().searchForString("Vlad","Vladyslav");
-        System.out.println(" ");
+    public void testProjectSearch(){
+        HomePage homePage = new HomePage(wd).get();
+        ProjectPage projectPage = homePage.searchForProject("Exis");
     }
-
 }

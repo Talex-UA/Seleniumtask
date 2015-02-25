@@ -1,17 +1,19 @@
 package JenkinsDashboard.Pages;
 
+import com.google.common.base.Function;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.LoadableComponent;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Page<T extends Page<T>> extends LoadableComponent<T> {
@@ -28,36 +30,65 @@ public abstract class Page<T extends Page<T>> extends LoadableComponent<T> {
     @FindBy (id = "search-box")
     private WebElement searchBox;
 
-
     public Page(WebDriver wd) {
         this.wd = wd;
         PageFactory.initElements(wd, this);
     }
 
-    public T searchForString(String whatWeLookFor){
-        searchBox.sendKeys(whatWeLookFor);
-        List<WebElement> suggestions = wd.findElements(By.cssSelector(".yui-ac-bd"));
-        for (WebElement currentElement:suggestions){
-            if (currentElement.getText().contains(whatWeLookFor)){
-                currentElement.click();
-                break;
+    public String[] search(String pattern) {
+        Actions actions = new Actions(wd);
+        actions.moveToElement(searchBox)
+                .click()
+                .sendKeys(searchBox, pattern)
+                .clickAndHold(searchBox)
+                .perform();
+
+        try{
+            List<WebElement> elements = new WebDriverWait(wd, 5, 200)
+                    .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(".yui-ac-bd li:not([style])")));
+            actions.release(searchBox).perform();
+
+            String[] result = new String[elements.size()];
+
+            int index = 0;
+            for (WebElement item : elements) {
+                result[index++] = item.getText();
             }
+            return result;
+        } catch (TimeoutException e){
+            System.out.println("Not found");
+            return new String[0];
         }
-        searchBox.submit();
-        return (T) this;
     }
 
-    public T searchForString(String letterForSearch, String whatWeLookFor){
-        searchBox.sendKeys(letterForSearch);
-        List<WebElement> suggestions = wd.findElements(By.cssSelector(".yui-ac-bd"));
-        for (WebElement currentElement:suggestions){
-            if (currentElement.getText().contains(whatWeLookFor)){
-                currentElement.click();
-                break;
+    public ProjectPage searchForProject(String pattern) {
+        Actions actions = new Actions(wd);
+        actions.moveToElement(searchBox)
+                .click()
+                .sendKeys(searchBox, pattern)
+                .clickAndHold(searchBox)
+                .perform();
+
+        try {
+            List<WebElement> elements = new WebDriverWait(wd, 5, 200)
+                    .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(".yui-ac-bd li:not([style])")));
+
+            String[] result = new String[elements.size()];
+
+            int index = 0;
+            for (WebElement item : elements) {
+                if (item.getText().contains(pattern)) {
+                    item.click();
+                    break;
+                }
             }
+        } catch (TimeoutException e) {
+            System.out.println("Not found");
+            return null;
         }
+        actions.release(searchBox).perform();
         searchBox.submit();
-        return (T) this;
+        return new ProjectPage(wd);
     }
 
     public abstract String getPageURL();

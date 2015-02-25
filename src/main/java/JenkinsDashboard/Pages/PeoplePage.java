@@ -31,7 +31,6 @@ public class PeoplePage extends SecuredPage<PeoplePage> {
     private void givePeopleElementsID() {
         JavascriptExecutor js = (JavascriptExecutor) wd;
         List<WebElement> people = wd.findElements(By.cssSelector("[id*=person] a"));
-        System.out.println(people.size());
         String user_Id = "User-ID";
         String script = "arguments[0].setAttribute('id'," + "\'" + user_Id + "\'"+")";
         for (int i = 1; i < people.size()-1; i+=3) {

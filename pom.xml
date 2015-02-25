@@ -118,6 +118,7 @@
                     <!--</compilerArguments>-->
                     <source>${source.version}</source>
                     <target>${target.version}</target>
+                    <debug>true</debug>
                 </configuration>
             </plugin>
         </plugins>
