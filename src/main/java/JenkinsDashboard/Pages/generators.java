@@ -44,4 +44,12 @@ public interface Generators {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
         return "This is my new project "+dateFormat.format(date);
     }
+
+    public default String getBuildToken(){
+        return "build_remotely";
+    }
+
+    public default String getBatchCommand(){
+        return "ping 173.194.113.201 -w 1 -n 10";
+    }
 }

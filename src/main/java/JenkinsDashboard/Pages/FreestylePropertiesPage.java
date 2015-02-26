@@ -31,6 +31,9 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
     @FindBy (id = "cb18")
     WebElement triggerBuildsRemotely;
 
+    @FindBy(name = "authToken")
+    WebElement authomationToken;
+
     @FindBy (id = "cb19")
     WebElement buildAfterOtherProjectsAreBuilt;
 
@@ -42,6 +45,15 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
 
     @FindBy (id = "yui-gen30-button")
     WebElement saveButton;
+
+    @FindBy (id="yui-gen3-button")
+    WebElement addBuildStepButton;
+
+    @FindBy (id="yui-gen32")
+    WebElement executeWindowsBatchCommand;
+
+    @FindBy (name = "command")
+    WebElement command;
 
     public FreestylePropertiesPage(WebDriver wd) {
         super(wd);
@@ -99,6 +111,7 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
     public void checkTriggerBuildsRemotely(){
         if (!triggerBuildsRemotely.isSelected()){
             triggerBuildsRemotely.click();
+            authomationToken.sendKeys(getBuildToken());
         }
     }
     public void checkBuildAfterOtherProjectsAreBuilt(){
@@ -120,5 +133,11 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
     public ProjectPage save(){
         saveButton.click();
         return new ProjectPage(wd);
+    }
+
+    public void addWindowsBatchCommand(){
+        addBuildStepButton.click();
+        executeWindowsBatchCommand.click();
+        command.sendKeys(getBatchCommand());
     }
 }

@@ -5,14 +5,9 @@ import org.hamcrest.Matchers;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.WebElement;
+import utils.web.JenkinsAPI;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -21,15 +16,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class MyTests extends BaseTest implements Generators {
 
     private String existingUserName = getExistingUserName();
-    private String existingUserFulName= getExistingUserFulName();
+    private String existingUserFulName = getExistingUserFulName();
     private String existingProjectName = getExistingProjectName();
     private String password = getPassword();
 
-    private String newUserName= generateNewUserName();
-    private String newUserFullName=generateNewUserFullName();
-    private String newUserEmail=generateNewUserEmail();
-    private String newProjectName=generateNewProjectName();
-    private String newProjectDescription=generateNewProjectDescription();
+    private String newUserName = generateNewUserName();
+    private String newUserFullName = generateNewUserFullName();
+    private String newUserEmail = generateNewUserEmail();
+    private String newProjectName = generateNewProjectName();
+    private String newProjectDescription = generateNewProjectDescription();
 
     private LogInPage loginPage;
 
@@ -82,13 +77,13 @@ public class MyTests extends BaseTest implements Generators {
     public void openExistingProject() {
         UserHomePage userHomePage = new UserHomePage(wd).get();
         ProjectPage projectPage = userHomePage.openProject(existingProjectName);
-        assertThat("Project not found",projectPage.getMainPanelText(), Matchers.containsString(existingProjectName));
+        assertThat("Project not found", projectPage.getMainPanelText(), Matchers.containsString(existingProjectName));
         userHomePage = projectPage.backToDashboard();
     }
 
     @Test
     public void newProjectTest() {
-        NewItemPage newItemPage =  new NewItemPage(wd).get();
+        NewItemPage newItemPage = new NewItemPage(wd).get();
         FreestylePropertiesPage freestylePropertiesPage = newItemPage.setFreestyleProject(newProjectName);
         freestylePropertiesPage.addDescription(newProjectDescription);
         ProjectPage projectPage = freestylePropertiesPage.save();
@@ -106,10 +101,10 @@ public class MyTests extends BaseTest implements Generators {
     }
 
     @Test
-    public void buildExisting(){
-        ProjectPage projectPage=new ProjectPage(wd).get();
+    public void buildExisting() {
+        ProjectPage projectPage = new ProjectPage(wd).get();
         projectPage.buildProject();
-        BuildsPage buildsPage=projectPage.openLatestBuild();
+        BuildsPage buildsPage = projectPage.openLatestBuild();
         assertTrue(buildsPage.getConsoleOutputText().contains("SUCCESS"));
     }
 
@@ -120,15 +115,36 @@ public class MyTests extends BaseTest implements Generators {
     }
 
     @Test
-    public void testProjectSearch(){
+    public void testProjectSearch() {
         HomePage homePage = new HomePage(wd).get();
         ProjectPage projectPage = homePage.searchForProject("Exis");
     }
 
     @Test
-    public void testPeopleSearch(){
+    public void testPeopleSearch() {
         PeoplePage peoplePage = new PeoplePage(wd).get();
         peoplePage.deleteTestUsers();
         System.out.println(" ");
+    }
+
+    @Test
+    public void testBuildViaAPI() {
+        new ProjectPage(wd).get();
+        new JenkinsAPI().sendPostRequest("http://seltr-kbp1-1.synapse.com:8080/job/ExistingProject/build?token=build_remotely&delay=0sec");
+        System.out.println(" ");
+    }
+
+    @Test
+    public void testNewProjectWithPing() {
+        NewItemPage newItemPage = new NewItemPage(wd).get();
+        FreestylePropertiesPage freestylePropertiesPage = newItemPage.setFreestyleProject(generateNewProjectName());
+        freestylePropertiesPage.addDescription(generateNewProjectDescription());
+        freestylePropertiesPage.checkTriggerBuildsRemotely();
+        freestylePropertiesPage.addWindowsBatchCommand();
+
+        ProjectPage projectPage = freestylePropertiesPage.save();
+        projectPage.buildProject();
+        System.out.println("");
+
     }
 }
