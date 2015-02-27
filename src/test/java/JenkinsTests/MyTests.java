@@ -5,6 +5,7 @@ import org.hamcrest.Matchers;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.openqa.selenium.UnhandledAlertException;
 import utils.web.JenkinsAPI;
 
 import java.util.Arrays;
@@ -87,17 +88,17 @@ public class MyTests extends BaseTest implements Generators {
         FreestylePropertiesPage freestylePropertiesPage = newItemPage.setFreestyleProject(newProjectName);
         freestylePropertiesPage.addDescription(newProjectDescription);
         ProjectPage projectPage = freestylePropertiesPage.save();
-
-        UserHomePage userHomePage = projectPage.backToDashboard();
-
-        boolean projectfound = false;
-        for (String currentProject : userHomePage.getProjectsNames()) {
-            if (currentProject.equals(newProjectName)) {
-                projectfound = true;
-                break;
-            }
-        }
-        assertTrue(projectfound);
+//
+//        UserHomePage userHomePage = projectPage.backToDashboard();
+//
+//        boolean projectfound = false;
+//        for (String currentProject : userHomePage.getProjectsNames()) {
+//            if (currentProject.equals(newProjectName)) {
+//                projectfound = true;
+//                break;
+//            }
+//        }
+//        assertTrue(projectfound);
     }
 
     @Test
@@ -128,23 +129,28 @@ public class MyTests extends BaseTest implements Generators {
     }
 
     @Test
-    public void testBuildViaAPI() {
-        new ProjectPage(wd).get();
-        new JenkinsAPI().sendPostRequest("http://seltr-kbp1-1.synapse.com:8080/job/ExistingProject/build?token=build_remotely&delay=0sec");
-        System.out.println(" ");
-    }
-
-    @Test
     public void testNewProjectWithPing() {
         NewItemPage newItemPage = new NewItemPage(wd).get();
-        FreestylePropertiesPage freestylePropertiesPage = newItemPage.setFreestyleProject(generateNewProjectName());
+        FreestylePropertiesPage freestylePropertiesPage = newItemPage.setFreestyleProject(newProjectName);
         freestylePropertiesPage.addDescription(generateNewProjectDescription());
         freestylePropertiesPage.checkTriggerBuildsRemotely();
         freestylePropertiesPage.addWindowsBatchCommand();
 
         ProjectPage projectPage = freestylePropertiesPage.save();
-        projectPage.buildProject();
-        System.out.println("");
 
+        Thread newThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int builds = projectPage.countBuildsBeforeAction();
+                projectPage.waitForNewBuild(builds);
+            }
+        });
+        newThread.start();
+
+        new JenkinsAPI().sendPostRequest(newProjectName, "build");
+        try{
+            newThread.join();
+        } catch (InterruptedException e){}
+        projectPage.waitForBuildToEnd();
     }
 }

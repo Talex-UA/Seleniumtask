@@ -1,6 +1,7 @@
 package JenkinsDashboard.Pages;
 
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -28,7 +29,7 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
     @FindBys({ @FindBy(className = "radio-block-control") })
     private List<WebElement> sourceCodeManagement;
 
-    @FindBy (id = "cb18")
+    @FindBy (name = "pseudoRemoteTrigger")//id = "cb18"
     WebElement triggerBuildsRemotely;
 
     @FindBy(name = "authToken")
@@ -135,9 +136,31 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
         return new ProjectPage(wd);
     }
 
-    public void addWindowsBatchCommand(){
-        addBuildStepButton.click();
-        executeWindowsBatchCommand.click();
-        command.sendKeys(getBatchCommand());
+    public void addWindowsBatchCommand() {
+        try{
+            addBuildStepButton.click();
+            while (!executeWindowsBatchCommand.isDisplayed()) {
+                try {
+                    Thread.sleep(500);
+                } catch (Exception e) {
+                }
+            }
+            executeWindowsBatchCommand.click();
+
+            boolean isDisplayed = false;
+            while (!isDisplayed) {
+                try {
+                    command.sendKeys(getBatchCommand());
+                    isDisplayed=true;
+                } catch (NoSuchElementException e) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException ie) {
+                    }
+                }
+            }
+        } catch (UnhandledAlertException uae){
+            uae.printStackTrace();
+        }
     }
 }

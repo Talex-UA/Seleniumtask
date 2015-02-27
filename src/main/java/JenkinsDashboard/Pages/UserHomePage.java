@@ -4,6 +4,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
+import utils.web.JenkinsAPI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ public class UserHomePage extends SecuredPage<UserHomePage> {
 
     @FindBy(css = ".model-link.inside.inverse>b") // css = ".model-link.inside.inverse>b"     xpath = "//*[@id='header']/div[2]/span/a[1]/b"
     WebElement userName;
-    @FindBys({@FindBy(className = "model-link")})
+    @FindBys({@FindBy(xpath = "//td[3]/a")}) // xpath = "//td[3]/a"    className = "model-link"
     List<WebElement> projects;
 
     public UserHomePage(WebDriver wd) {
@@ -86,8 +87,7 @@ public class UserHomePage extends SecuredPage<UserHomePage> {
     public void deleteTestProjects() {
         List<String> projects = getProjectsNamesByTemplate("Test-Project ");
         for (String project : projects) {
-            projectPage = openProject(project);
-            userHomePage = projectPage.deleteProject();
+            new JenkinsAPI().sendPostRequest(project, "doDelete");
         }
     }
 

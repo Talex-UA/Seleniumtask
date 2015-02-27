@@ -1,8 +1,7 @@
 package utils.web;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStreamReader;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -12,68 +11,46 @@ public class JenkinsAPI {
     StringBuilder stringBuilder;
     String urlParameters;
 
-    public void sendPostRequest(String serverURL) {
+    /**
+     * @param projectName - just pass your current project name without any changes in letters
+     * @param actionTrigger - pass respective trigger for each action:
+     * <ul>
+     *     <li> "build" to build project
+     *     <li> "doDelete" to delete project
+     *     <li> "disable" to disable project
+     *     <li> "enable" to enable
+     * <ul/>
+     */
+    public void sendPostRequest(String projectName, String actionTrigger) {
+
+        String finalURL="";
+
+        if (actionTrigger.equals("build")){
+            finalURL = "http://seltr-kbp1-1.synapse.com:8080/job/"+projectName.replaceAll("\\s+","%20")+"/build?delay=0sec";
+        } else if(actionTrigger.equals("doDelete")){
+            finalURL = "http://seltr-kbp1-1.synapse.com:8080/job/"+projectName.replaceAll("\\s+","%20")+"/doDelete";
+        } else if(actionTrigger.equals("disable")) {
+            finalURL = "http://seltr-kbp1-1.synapse.com:8080/job/"+projectName.replaceAll("\\s+","%20")+"/disable";
+        } else if(actionTrigger.equals("enable")) {
+            finalURL = "http://seltr-kbp1-1.synapse.com:8080/job/"+projectName.replaceAll("\\s+","%20")+"/enable";
+        } else {
+            System.out.println("Wrong trigger: "+actionTrigger);
+            return;
+        }
 
         try {
-            URL url = new URL(serverURL);
+            URL url = new URL(finalURL);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
+            connection.setRequestProperty("Cookie", "JSESSIONID.238546b8=1dw4837mygo3e1q1l064lsbj6x");
             connection.setReadTimeout(5000);
+            System.out.println("\nSending 'POST' request to URL : " + url);
             connection.getInputStream();
 
-//            connection.setDoOutput(true);
-//            DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-////            wr.writeBytes(urlParameters);
-//            wr.flush();
-//            wr.close();
-////
             int responseCode = connection.getResponseCode();
-            System.out.println("\nSending 'POST' request to URL : " + url);
-//////            System.out.println("Post parameters : " + urlParameters);
             System.out.println("Response Code : " + responseCode);
-////
-//            reader = new BufferedReader(
-//                    new InputStreamReader(connection.getInputStream()));
-//            String inputLine;
-//
-//            stringBuilder=new StringBuilder();
-//
-//            while ((inputLine = reader.readLine()) != null) {
-//                stringBuilder.append(inputLine);
-//            }
-//            reader.close();
-//
-//            System.out.println(stringBuilder.toString());
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void getHTTP(String serverURL) {
-        URL url = null;
-        BufferedReader reader;
-        StringBuilder stringBuilder;
-
-        try {
-            url = new URL(serverURL);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setReadTimeout(5000);
-            connection.connect();
-            reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            stringBuilder = new StringBuilder();
-
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                stringBuilder.append(line + "\n");
-            }
-
-            System.out.println(stringBuilder.toString());
-
-            reader.close();
-
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

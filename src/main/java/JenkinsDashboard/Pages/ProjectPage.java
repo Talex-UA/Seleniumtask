@@ -84,4 +84,30 @@ public class ProjectPage extends SecuredPage<ProjectPage> {
         builds.get(0).click();
         return new BuildsPage(wd);
     }
+
+    public int countBuildsBeforeAction(){
+        return builds.size();
+    }
+
+    public void waitForNewBuild(int countBuildsBeforeAction){
+        int countBuildsAfterAction = builds.size();
+        while (countBuildsAfterAction-countBuildsBeforeAction!=1) {
+            try {
+                Thread.sleep(500);
+            }
+            catch (InterruptedException e){}
+            countBuildsAfterAction=builds.size();
+        }
+    }
+
+    public ProjectPage waitForBuildToEnd(){
+        BuildsPage buildsPage=openLatestBuild();
+        while (!buildsPage.getConsoleOutputText().contains("SUCCESS")){
+            try {
+                Thread.sleep(500);
+            }
+            catch (InterruptedException e){}
+        }
+        return new ProjectPage(wd);
+    }
 }
