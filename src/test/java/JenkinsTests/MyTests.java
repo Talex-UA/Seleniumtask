@@ -36,7 +36,7 @@ public class MyTests extends BaseTest implements Generators {
 
     @After
     public void logOutIfLoggedIn() {
-        loginPage.logOut();
+        wd.manage().deleteAllCookies();
     }
 
     @AfterClass
@@ -88,17 +88,17 @@ public class MyTests extends BaseTest implements Generators {
         FreestylePropertiesPage freestylePropertiesPage = newItemPage.setFreestyleProject(newProjectName);
         freestylePropertiesPage.addDescription(newProjectDescription);
         ProjectPage projectPage = freestylePropertiesPage.save();
-//
-//        UserHomePage userHomePage = projectPage.backToDashboard();
-//
-//        boolean projectfound = false;
-//        for (String currentProject : userHomePage.getProjectsNames()) {
-//            if (currentProject.equals(newProjectName)) {
-//                projectfound = true;
-//                break;
-//            }
-//        }
-//        assertTrue(projectfound);
+
+        UserHomePage userHomePage = projectPage.backToDashboard();
+
+        boolean projectfound = false;
+        for (String currentProject : userHomePage.getProjectsNames()) {
+            if (currentProject.equals(newProjectName)) {
+                projectfound = true;
+                break;
+            }
+        }
+        assertTrue(projectfound);
     }
 
     @Test

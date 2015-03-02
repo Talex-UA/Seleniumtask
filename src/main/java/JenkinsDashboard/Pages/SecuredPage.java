@@ -8,6 +8,8 @@ import org.openqa.selenium.support.FindBy;
 
 public abstract class SecuredPage <T extends SecuredPage<T>>extends Page<T> implements Generators{
 
+    public static String cookie_id;
+
     @FindBy (name = "j_username")
     WebElement username;
 

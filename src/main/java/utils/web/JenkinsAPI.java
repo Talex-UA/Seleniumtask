@@ -1,15 +1,20 @@
 package utils.web;
 
+import JenkinsDashboard.Pages.Generators;
+import JenkinsDashboard.Pages.SecuredPage;
+import org.apache.commons.codec.binary.Base64;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class JenkinsAPI {
+public class JenkinsAPI implements Generators{
 
     BufferedReader reader;
     StringBuilder stringBuilder;
     String urlParameters;
+    String myCredentials = getExistingUserName()+":"+getPassword();
 
     /**
      * @param projectName - just pass your current project name without any changes in letters
@@ -42,7 +47,7 @@ public class JenkinsAPI {
             URL url = new URL(finalURL);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Cookie", "JSESSIONID.238546b8=1dw4837mygo3e1q1l064lsbj6x");
+            connection.setRequestProperty("Authorization", "Basic " + new String(new Base64().encode(myCredentials.getBytes())));
             connection.setReadTimeout(5000);
             System.out.println("\nSending 'POST' request to URL : " + url);
             connection.getInputStream();
