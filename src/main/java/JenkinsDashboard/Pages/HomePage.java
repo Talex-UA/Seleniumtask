@@ -1,10 +1,11 @@
 package JenkinsDashboard.Pages;
 
+import org.hamcrest.Matchers;
+import org.junit.Assert;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 public class HomePage extends Page<HomePage>{
 
@@ -13,10 +14,10 @@ public class HomePage extends Page<HomePage>{
     }
 
     @FindBy(css = ".login>a[href*=login]") // css = ".login>a[href*=login]" xpath = "//*[@id='header']/div[2]/a[1]"
-    WebElement logIn;
+    private WebElement logIn;
 
     @FindBy(css = ".login>a[href*=signup]") // css = ".login>a[href*=signup]" xpath = "//*[@id='header']/div[2]/a[2]"
-    WebElement signUp;
+    private WebElement signUp;
 
     public HomePage gotoHomePage() {
         jenkinsIcon.click();
@@ -30,7 +31,7 @@ public class HomePage extends Page<HomePage>{
 
     @Override
     protected void checkUniqueElements() throws NoSuchElementException {
-        logIn.getAttribute("href").contains("login");
+        Assert.assertThat(logIn.getAttribute("href"), Matchers.containsString("login"));
     }
 
     public SignUpPage gotoSignUpPage(){

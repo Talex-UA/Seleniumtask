@@ -9,52 +9,55 @@ import org.openqa.selenium.support.FindBys;
 
 import java.util.List;
 
-public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage>{
+import static utils.Generators.*;
 
-    @FindBy (css = "#main-panel-content>form>table>tbody>tr>td>textarea") // css = "#main-panel-content>form>table>tbody>tr>td>textarea" xpath = "//*[@id='main-panel-content']/form/table/tbody/tr[3]/td[3]/textarea"
-    WebElement description;
+public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage> {
 
-    @FindBy (id = "cb6")
-    WebElement discardOldBuilds;
+    @FindBy(css = "#main-panel-content>form>table>tbody>tr>td>textarea")
+    // css = "#main-panel-content>form>table>tbody>tr>td>textarea" xpath = "//*[@id='main-panel-content']/form/table/tbody/tr[3]/td[3]/textarea"
+    private WebElement description;
 
-    @FindBy (id = "cb7")
-    WebElement thisBuildIsParameterized;
+    @FindBy(id = "cb6")
+    private WebElement discardOldBuilds;
 
-    @FindBy (id = "cb8")
-    WebElement disableBuild;
+    @FindBy(id = "cb7")
+    private WebElement thisBuildIsParameterized;
 
-    @FindBy (id = "cb9")
-    WebElement executeConcurrentBuildsIfNecessary;
+    @FindBy(id = "cb8")
+    private WebElement disableBuild;
 
-    @FindBys({ @FindBy(className = "radio-block-control") })
+    @FindBy(id = "cb9")
+    private WebElement executeConcurrentBuildsIfNecessary;
+
+    @FindBys({@FindBy(className = "radio-block-control")})
     private List<WebElement> sourceCodeManagement;
 
-    @FindBy (name = "pseudoRemoteTrigger")//id = "cb18"
-    WebElement triggerBuildsRemotely;
+    @FindBy(name = "pseudoRemoteTrigger")//id = "cb18"
+    private WebElement triggerBuildsRemotely;
 
     @FindBy(name = "authToken")
-    WebElement authomationToken;
+    private WebElement authomationToken;
 
-    @FindBy (id = "cb19")
-    WebElement buildAfterOtherProjectsAreBuilt;
+    @FindBy(id = "cb19")
+    private WebElement buildAfterOtherProjectsAreBuilt;
 
-    @FindBy (id = "cb20")
-    WebElement buildPeriodically;
+    @FindBy(id = "cb20")
+    private WebElement buildPeriodically;
 
-    @FindBy (id = "cb21")
-    WebElement pollSCM;
+    @FindBy(id = "cb21")
+    private WebElement pollSCM;
 
-    @FindBy (id = "yui-gen30-button")
-    WebElement saveButton;
+    @FindBy(id = "yui-gen30-button")
+    private WebElement saveButton;
 
-    @FindBy (id="yui-gen3-button")
-    WebElement addBuildStepButton;
+    @FindBy(id = "yui-gen3-button")
+    private WebElement addBuildStepButton;
 
-    @FindBy (id="yui-gen32")
-    WebElement executeWindowsBatchCommand;
+    @FindBy(id = "yui-gen32")
+    private WebElement executeWindowsBatchCommand;
 
-    @FindBy (name = "command")
-    WebElement command;
+    @FindBy(name = "command")
+    private WebElement command;
 
     public FreestylePropertiesPage(WebDriver wd) {
         super(wd);
@@ -62,7 +65,7 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
 
     @Override
     public String getPageURL() {
-        return "http://seltr-kbp1-1.synapse.com:8080/job/"+getExistingProjectName()+"/configure";
+        return "http://seltr-kbp1-1.synapse.com:8080/job/" + getExistingProjectName() + "/configure";
     }
 
     @Override
@@ -70,27 +73,30 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
         description.isDisplayed();
     }
 
-    public void addDescription(String description){
+    public void addDescription(String description) {
         this.description.sendKeys(description);
     }
 
-    public void checkDiscardOldBuilds(){
-        if (!discardOldBuilds.isSelected()){
+    public void checkDiscardOldBuilds() {
+        if (!discardOldBuilds.isSelected()) {
             discardOldBuilds.click();
         }
     }
-    public void checkThisBuildIsParameterized(){
-        if (!thisBuildIsParameterized.isSelected()){
+
+    public void checkThisBuildIsParameterized() {
+        if (!thisBuildIsParameterized.isSelected()) {
             thisBuildIsParameterized.click();
         }
     }
-    public void checkDisableBuild(){
-        if (!disableBuild.isSelected()){
+
+    public void checkDisableBuild() {
+        if (!disableBuild.isSelected()) {
             disableBuild.click();
         }
     }
-    public void checkExecuteConcurrentBuildsIfNecessary(){
-        if (!executeConcurrentBuildsIfNecessary.isSelected()){
+
+    public void checkExecuteConcurrentBuildsIfNecessary() {
+        if (!executeConcurrentBuildsIfNecessary.isSelected()) {
             executeConcurrentBuildsIfNecessary.click();
         }
     }
@@ -103,41 +109,44 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
      * <li>2 - CVS Projectset</li>
      * <li>3 - Subversion</li>
      */
-    public void setSourceCodeManagement(int index){
-        if(!sourceCodeManagement.get(index).isSelected()){
+    public void setSourceCodeManagement(int index) {
+        if (!sourceCodeManagement.get(index).isSelected()) {
             sourceCodeManagement.get(index).click();
         }
     }
 
-    public void checkTriggerBuildsRemotely(){
-        if (!triggerBuildsRemotely.isSelected()){
+    public void checkTriggerBuildsRemotely() {
+        if (!triggerBuildsRemotely.isSelected()) {
             triggerBuildsRemotely.click();
             authomationToken.sendKeys(getBuildToken());
         }
     }
-    public void checkBuildAfterOtherProjectsAreBuilt(){
-        if (!buildAfterOtherProjectsAreBuilt.isSelected()){
+
+    public void checkBuildAfterOtherProjectsAreBuilt() {
+        if (!buildAfterOtherProjectsAreBuilt.isSelected()) {
             buildAfterOtherProjectsAreBuilt.click();
         }
     }
-    public void checkBuildPeriodically(){
-        if (!buildPeriodically.isSelected()){
+
+    public void checkBuildPeriodically() {
+        if (!buildPeriodically.isSelected()) {
             buildPeriodically.click();
         }
     }
-    public void checkPollSCM(){
-        if (!pollSCM.isSelected()){
+
+    public void checkPollSCM() {
+        if (!pollSCM.isSelected()) {
             pollSCM.click();
         }
     }
 
-    public ProjectPage save(){
+    public ProjectPage save() {
         saveButton.click();
         return new ProjectPage(wd);
     }
 
     public void addWindowsBatchCommand() {
-        try{
+        try {
             addBuildStepButton.click();
             while (!executeWindowsBatchCommand.isDisplayed()) {
                 try {
@@ -151,7 +160,7 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
             while (!isDisplayed) {
                 try {
                     command.sendKeys(getBatchCommand());
-                    isDisplayed=true;
+                    isDisplayed = true;
                 } catch (NoSuchElementException e) {
                     try {
                         Thread.sleep(500);
@@ -159,7 +168,7 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
                     }
                 }
             }
-        } catch (UnhandledAlertException uae){
+        } catch (UnhandledAlertException uae) {
             uae.printStackTrace();
         }
     }

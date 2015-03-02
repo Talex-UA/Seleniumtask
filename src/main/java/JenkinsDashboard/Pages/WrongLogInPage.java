@@ -8,10 +8,10 @@ import org.openqa.selenium.support.FindBy;
 public class WrongLogInPage extends Page<WrongLogInPage> {
 
     @FindBy (css = "#main-panel-content>div>a")
-    WebElement tryAgain;
+    private WebElement tryAgain;
 
     @FindBy (id = "main-panel-content")
-    WebElement mainPanel;
+    private WebElement mainPanel;
 
     public WrongLogInPage(WebDriver wd) {
         super(wd);
@@ -30,7 +30,6 @@ public class WrongLogInPage extends Page<WrongLogInPage> {
     @Override
     protected void checkUniqueElements() throws NoSuchElementException {
         tryAgain.isDisplayed();
-        mainPanel.isDisplayed();
     }
 
     public LogInPage tryAgain(){

@@ -1,19 +1,18 @@
 package utils.web;
 
-import JenkinsDashboard.Pages.Generators;
-import JenkinsDashboard.Pages.SecuredPage;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class JenkinsAPI implements Generators{
+import static utils.Generators.*;
 
-    BufferedReader reader;
-    StringBuilder stringBuilder;
-    String urlParameters;
+public class JenkinsAPI{
+
+    protected final Logger log = LogManager.getLogger(this);
     String myCredentials = getExistingUserName()+":"+getPassword();
 
     /**
@@ -49,12 +48,11 @@ public class JenkinsAPI implements Generators{
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Authorization", "Basic " + new String(new Base64().encode(myCredentials.getBytes())));
             connection.setReadTimeout(5000);
-            System.out.println("\nSending 'POST' request to URL : " + url);
+            log.info("\nSending 'POST' request to URL : " + url);
             connection.getInputStream();
 
             int responseCode = connection.getResponseCode();
-            System.out.println("Response Code : " + responseCode);
-
+            log.info("Response Code : " + responseCode);
         } catch (IOException e) {
             e.printStackTrace();
         }

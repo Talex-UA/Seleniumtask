@@ -1,6 +1,5 @@
 package JenkinsDashboard.Pages;
 
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -9,31 +8,33 @@ import org.openqa.selenium.support.FindBys;
 
 import java.util.List;
 
+import static utils.Generators.*;
+
 public class ProjectPage extends SecuredPage<ProjectPage> {
 
     @FindBy(css = "#main-panel-content [href*=ws]" ) // css = "#main-panel-content  [href*=ws]"   xpath = "//*[@id='main-panel-content']/table/tbody/tr[1]/td[2]/a"
-    WebElement Workspace;
+    private WebElement Workspace;
 
     @FindBy(css = "#main-panel-content [href*=changes]")// css = "#main-panel-content  [href*=changes]"   xpath = "//*[@id='main-panel-content']/table/tbody/tr[2]/td[2]/a"
-    WebElement RecentChanges;
+    private WebElement RecentChanges;
 
     @FindBy(id = "yui-gen1-button")
-    WebElement disableProject;
+    private WebElement disableProject;
 
     @FindBy(css = ".icon-clock.icon-md") // css = ".icon-clock.icon-md" xpath = "//*[@id='tasks']/div[5]/a[2]"
-    WebElement buildNow;
+    private WebElement buildNow;
 
     @FindBy(css = ".icon-up.icon-md") // css = ".icon-up.icon-md"  xpath = "//*[@id='tasks']/div[1]/a[2]"
-    WebElement backToDashBoard;
+    private WebElement backToDashBoard;
 
     @FindBy(id = "main-panel-content")
-    WebElement mainPanel;
+    private WebElement mainPanel;
 
     @FindBy(css = ".icon-edit-delete.icon-md")
-    WebElement removeButton;
+    private WebElement removeButton;
 
     @FindBys({@FindBy(className = "zws-inserted")})
-    List<WebElement> builds;
+    private List<WebElement> builds;
 
     public ProjectPage(WebDriver wd) {
         super(wd);
@@ -72,15 +73,7 @@ public class ProjectPage extends SecuredPage<ProjectPage> {
         return mainPanel.getText();
     }
 
-    public UserHomePage deleteProject() {
-        removeButton.click();
-        Alert alert = wd.switchTo().alert();
-        alert.accept();
-        return new UserHomePage(wd);
-    }
-
     public BuildsPage openLatestBuild(){
-        System.out.println(builds.get(0).getText());
         builds.get(0).click();
         return new BuildsPage(wd);
     }
@@ -100,7 +93,7 @@ public class ProjectPage extends SecuredPage<ProjectPage> {
         }
     }
 
-    public ProjectPage waitForBuildToEnd(){
+    public BuildsPage waitForBuildToEnd(){
         BuildsPage buildsPage=openLatestBuild();
         while (!buildsPage.getConsoleOutputText().contains("SUCCESS")){
             try {
@@ -108,6 +101,6 @@ public class ProjectPage extends SecuredPage<ProjectPage> {
             }
             catch (InterruptedException e){}
         }
-        return new ProjectPage(wd);
+        return new BuildsPage(wd);
     }
 }

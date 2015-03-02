@@ -1,6 +1,5 @@
 package JenkinsDashboard.Pages;
 
-import com.google.common.base.Function;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hamcrest.Matchers;
@@ -13,7 +12,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.LoadableComponent;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Page<T extends Page<T>> extends LoadableComponent<T> {
@@ -27,7 +25,7 @@ public abstract class Page<T extends Page<T>> extends LoadableComponent<T> {
     @FindBy(xpath = "//div/span/a[2]")
     private WebElement logOut;
 
-    @FindBy (id = "search-box")
+    @FindBy(id = "search-box")
     private WebElement searchBox;
 
     public Page(WebDriver wd) {
@@ -35,7 +33,7 @@ public abstract class Page<T extends Page<T>> extends LoadableComponent<T> {
         PageFactory.initElements(wd, this);
     }
 
-    public String[] search(String pattern) {
+    public List<WebElement> search(String pattern) {
         Actions actions = new Actions(wd);
         actions.moveToElement(searchBox)
                 .click()
@@ -43,50 +41,37 @@ public abstract class Page<T extends Page<T>> extends LoadableComponent<T> {
                 .clickAndHold(searchBox)
                 .perform();
 
-        try{
-            List<WebElement> elements = new WebDriverWait(wd, 5, 200)
+        List<WebElement> elements;
+        try {
+            elements = new WebDriverWait(wd, 5, 200)
                     .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(".yui-ac-bd li:not([style])")));
             actions.release(searchBox).perform();
-
-            String[] result = new String[elements.size()];
-
-            int index = 0;
-            for (WebElement item : elements) {
-                result[index++] = item.getText();
-            }
-            return result;
-        } catch (TimeoutException e){
-            System.out.println("Not found");
-            return new String[0];
+        } catch (TimeoutException e) {
+            throw e;
         }
+        return elements;
+    }
+
+    public String[] getSearchResults(String pattern) {
+        List<WebElement> elements = search(pattern);
+        String[] result = new String[elements.size()];
+
+        int index = 0;
+        for (WebElement item : elements) {
+            result[index++] = item.getText();
+        }
+        return result;
     }
 
     public ProjectPage searchForProject(String pattern) {
-        Actions actions = new Actions(wd);
-        actions.moveToElement(searchBox)
-                .click()
-                .sendKeys(searchBox, pattern)
-                .clickAndHold(searchBox)
-                .perform();
+        List<WebElement> elements = search(pattern);
 
-        try {
-            List<WebElement> elements = new WebDriverWait(wd, 5, 200)
-                    .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(".yui-ac-bd li:not([style])")));
-
-            String[] result = new String[elements.size()];
-
-            int index = 0;
-            for (WebElement item : elements) {
-                if (item.getText().contains(pattern)) {
-                    item.click();
-                    break;
-                }
+        for (WebElement item : elements) {
+            if (item.getText().contains(pattern)) {
+                item.click();
+                break;
             }
-        } catch (TimeoutException e) {
-            System.out.println("Not found");
-            return null;
         }
-        actions.release(searchBox).perform();
         searchBox.submit();
         return new ProjectPage(wd);
     }
@@ -98,12 +83,14 @@ public abstract class Page<T extends Page<T>> extends LoadableComponent<T> {
     public boolean isLoggedIn() {
         try {
             return logOut.getAttribute("href").contains("logout");
-        } catch (NoSuchElementException e){}
+        } catch (NoSuchElementException e) {
+        }
         return false;
     }
 
     /**
      * It is safe to call it even if you're not logged in - in this case it will do nothing
+     *
      * @return
      */
     public T logOut() {
@@ -124,10 +111,8 @@ public abstract class Page<T extends Page<T>> extends LoadableComponent<T> {
         try {
             Assert.assertThat("Wrong page URL", wd.getCurrentUrl(), Matchers.equalToIgnoringCase(getPageURL()));
             checkUniqueElements();
-        } catch (NoSuchElementException e){
-                throw new Error();
+        } catch (NoSuchElementException e) {
+            throw new Error();
         }
     }
-
-
 }

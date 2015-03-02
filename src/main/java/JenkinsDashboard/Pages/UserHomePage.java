@@ -1,5 +1,7 @@
 package JenkinsDashboard.Pages;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -11,20 +13,16 @@ import java.util.List;
 
 public class UserHomePage extends SecuredPage<UserHomePage> {
 
-    private UserHomePage userHomePage;
-    private ProjectPage projectPage;
-    private PeoplePage peoplePage;
-
     @FindBy(css = ".icon-new-package.icon-md") // css = ".icon-new-package.icon-md"    xpath = "//*[@id='tasks']/div[1]/a[2]"
-    WebElement newItem;
+    private WebElement newItem;
 
     @FindBy (css = ".icon-user.icon-md") // css = ".icon-user.icon-md"  xpath = "//*[@id='tasks']/div[2]/a[2]"
-    WebElement PeoplePage;
+    private WebElement PeoplePage;
 
     @FindBy(css = ".model-link.inside.inverse>b") // css = ".model-link.inside.inverse>b"     xpath = "//*[@id='header']/div[2]/span/a[1]/b"
-    WebElement userName;
+    private WebElement userName;
     @FindBys({@FindBy(xpath = "//td[3]/a")}) // xpath = "//td[3]/a"    className = "model-link"
-    List<WebElement> projects;
+    private List<WebElement> projects;
 
     public UserHomePage(WebDriver wd) {
         super(wd);
@@ -38,8 +36,6 @@ public class UserHomePage extends SecuredPage<UserHomePage> {
     @Override
     protected void checkUniqueElements() throws Error {
         newItem.isDisplayed();
-        userName.isDisplayed();
-        for (WebElement project: projects) project.isDisplayed();
     }
 
     public UserHomePage gotoUserHomePage() {
@@ -92,8 +88,20 @@ public class UserHomePage extends SecuredPage<UserHomePage> {
     }
 
     public void deleteTestUsers(){
-        peoplePage = new PeoplePage(wd).get();
+        PeoplePage peoplePage = new PeoplePage(wd).get();
         peoplePage.deleteTestUsers();
     }
 
+    public UserHomePage openTab(String tabName){
+        try {
+            wd.findElement(By.cssSelector(".tab>a[href*="+tabName+"]")).click();
+        } catch (NoSuchElementException e){
+
+        }
+        return new UserHomePage(wd);
+    }
+
+    public String getPageTitle() {
+        return wd.getTitle();
+    }
 }

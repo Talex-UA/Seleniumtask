@@ -13,14 +13,11 @@ import java.util.List;
 
 public class PeoplePage extends SecuredPage<PeoplePage> {
 
-//    private UserPage userPage;
-//    private PeoplePage peoplePage;
-
     @FindBys({@FindBy(id = "User-ID" )}) // this ID is given to needed elements by givePeopleElementsID method. original locators: css = "#people td:nth-of-type(2)>a"   xpath = "//td[2]/a"
-    List<WebElement> people;
+    private List<WebElement> people;
 
     @FindBy(id = "main-panel-content")
-    WebElement mainPanel;
+    private WebElement mainPanel;
 
     public PeoplePage(WebDriver wd) {
         super(wd);
@@ -47,15 +44,6 @@ public class PeoplePage extends SecuredPage<PeoplePage> {
     @Override
     protected void checkUniqueElements() throws Error {
         mainPanel.getText().contains("Includes all known “users”");
-        givePeopleElementsID();
-    }
-
-    public List<String> getPeopleNames() {
-        List<String> peopleNames = new ArrayList<>();
-        for (WebElement project : people) {
-            peopleNames.add(project.getText());
-        }
-        return peopleNames;
     }
 
     public List<String> getPeopleNameByTemplate(String template){

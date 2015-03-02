@@ -8,13 +8,13 @@ import org.openqa.selenium.support.PageFactory;
 public class LogInPage extends Page<LogInPage>{
 
     @FindBy (name = "j_username")
-    WebElement username;
+    private WebElement username;
 
     @FindBy (name = "j_password")
-    WebElement password;
+    private WebElement password;
 
     @FindBy (id="yui-gen1-button")
-    WebElement logInButton;
+    private WebElement logInButton;
 
     public LogInPage(WebDriver wd){
         super(wd);

@@ -8,31 +8,31 @@ import org.openqa.selenium.support.FindBy;
 public class SignUpPage extends Page<SignUpPage>{
 
     @FindBy (name = "username")
-    WebElement username;
+    private WebElement username;
 
     @FindBy (name = "password1")
-    WebElement password;
+    private WebElement password;
 
     @FindBy (name = "password2")
-    WebElement confirm_password;
+    private WebElement confirm_password;
 
     @FindBy (name = "fullname")
-    WebElement fullname;
+    private WebElement fullname;
 
     @FindBy (name = "email")
-    WebElement email;
+    private WebElement email;
 
     @FindBy (id = "yui-gen1-button")
-    WebElement signUpButton;
+    private WebElement signUpButton;
 
     @FindBy (css = "#main-panel-content>div>a") // css = "#main-panel-content>div>a"    xpath = "//*[@id='main-panel-content']/div/a"
-    WebElement gotoTopPage;
+    private WebElement gotoTopPage;
 
     @FindBy (id = "main-panel-content")
-    WebElement mainPanel;
+    private WebElement mainPanel;
 
     @FindBy (className = "error")
-    WebElement errorMessage;
+    private WebElement errorMessage;
 
     public SignUpPage(WebDriver wd){
         super(wd);

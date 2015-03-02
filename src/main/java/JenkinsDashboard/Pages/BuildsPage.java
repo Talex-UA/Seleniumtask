@@ -4,13 +4,21 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import org.hamcrest.Matchers;
+import org.junit.Assert;
+
+import static utils.Generators.*;
+
 public class BuildsPage extends SecuredPage<BuildsPage>{
 
     @FindBy (css = ".icon-terminal.icon-md") //css = ".icon-terminal.icon-md"   xpath = "//*[@id='tasks']/div[4]/a[2]"
-    WebElement consoleOutput;
+    private WebElement consoleOutput;
 
     @FindBy (className = "console-output")
-    WebElement consoleOutputText;
+    private WebElement consoleOutputText;
+
+    @FindBy (css = ".icon-up.icon-md")
+    private WebElement backToProject;
 
     public BuildsPage(WebDriver wd) {
         super(wd);
@@ -23,7 +31,7 @@ public class BuildsPage extends SecuredPage<BuildsPage>{
 
     @Override
     protected void checkUniqueElements() throws Error {
-        consoleOutput.getText().contains("Console Output");
+        Assert.assertThat(consoleOutput.getText(), Matchers.containsString("Console Output"));
     }
 
     public String getConsoleOutputText(){
@@ -34,5 +42,10 @@ public class BuildsPage extends SecuredPage<BuildsPage>{
     public UserHomePage backToDashboard(){
         jenkinsIcon.click();
         return new UserHomePage(wd);
+    }
+
+    public ProjectPage goBackToProject(){
+        backToProject.click();
+        return new ProjectPage(wd);
     }
 }

@@ -15,13 +15,13 @@ public class NewItemPage extends SecuredPage<NewItemPage> {
     }
 
     @FindBy (id = "name")
-    WebElement itemName;
+    private WebElement itemName;
 
     @FindBy (css = "input[type='radio'][value*=FreeStyleProject]" ) // css = "input[type='radio'][value*=FreeStyleProject]"   xpath = "//*[@id='main-panel-content']/form/table/tbody/tr[3]/td/input"
-    WebElement freestyleProject;
+    private WebElement freestyleProject;
 
     @FindBy (id = "ok-button")
-    WebElement oKbutton;
+    private WebElement oKbutton;
 
     @Override
     public String getPageURL() {

@@ -5,27 +5,24 @@ import org.hamcrest.Matchers;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.openqa.selenium.UnhandledAlertException;
 import utils.web.JenkinsAPI;
 
-import java.util.Arrays;
-
-import static junit.framework.TestCase.assertTrue;
+import static utils.Generators.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith(JUnit4.class)
-public class MyTests extends BaseTest implements Generators {
+public class MyTests extends BaseTest {
 
     private String existingUserName = getExistingUserName();
     private String existingUserFulName = getExistingUserFulName();
     private String existingProjectName = getExistingProjectName();
     private String password = getPassword();
 
-    private String newUserName = generateNewUserName();
     private String newUserFullName = generateNewUserFullName();
     private String newUserEmail = generateNewUserEmail();
     private String newProjectName = generateNewProjectName();
-    private String newProjectDescription = generateNewProjectDescription();
+
+    private String tabName = generateString(10);
 
     private LogInPage loginPage;
 
@@ -50,28 +47,28 @@ public class MyTests extends BaseTest implements Generators {
     public void LogInTest() {
         loginPage.get();
         UserHomePage userHomePage = loginPage.logIn(existingUserName, password);
-        assertTrue(userHomePage.getUserName().contains(existingUserFulName));
+        assertThat(userHomePage.getUserName(), Matchers.containsString(existingUserFulName));
     }
 
     @Test
     public void LogInWrongCredentials() {
         LogInPage logInPage = new LogInPage(wd).get();
         WrongLogInPage wrongLogInPage = logInPage.logInWithWrongCredentials("asfaf", "segwf");
-        assertTrue(wrongLogInPage.checkForError());
+        assertThat(wrongLogInPage.checkForError(), Matchers.is(true));
     }
 
     @Test
     public void SignUpNewUserTest() {
         SignUpPage signUpPage = new SignUpPage(wd).get();
-        UserHomePage userHomePage = signUpPage.signUpNewUser(newUserName, password, newUserFullName, newUserEmail);
-        assertTrue(userHomePage.getUserName().contains(newUserFullName));
+        UserHomePage userHomePage = signUpPage.signUpNewUser(generateNewUserName(), password, newUserFullName, newUserEmail);
+        assertThat(userHomePage.getUserName(), Matchers.containsString(newUserFullName));
     }
 
     @Test
     public void SignUpExistingNameUser() {
         SignUpPage signUpPage = new SignUpPage(wd).get();
         signUpPage.signUpExistingNameUser(existingUserName, password, newUserFullName, newUserEmail);
-        assertTrue(signUpPage.checkForError());
+        assertThat(signUpPage.checkForError(), Matchers.is(true));
     }
 
     @Test
@@ -79,14 +76,13 @@ public class MyTests extends BaseTest implements Generators {
         UserHomePage userHomePage = new UserHomePage(wd).get();
         ProjectPage projectPage = userHomePage.openProject(existingProjectName);
         assertThat("Project not found", projectPage.getMainPanelText(), Matchers.containsString(existingProjectName));
-        userHomePage = projectPage.backToDashboard();
     }
 
     @Test
     public void newProjectTest() {
         NewItemPage newItemPage = new NewItemPage(wd).get();
         FreestylePropertiesPage freestylePropertiesPage = newItemPage.setFreestyleProject(newProjectName);
-        freestylePropertiesPage.addDescription(newProjectDescription);
+        freestylePropertiesPage.addDescription(generateNewProjectDescription());
         ProjectPage projectPage = freestylePropertiesPage.save();
 
         UserHomePage userHomePage = projectPage.backToDashboard();
@@ -98,7 +94,7 @@ public class MyTests extends BaseTest implements Generators {
                 break;
             }
         }
-        assertTrue(projectfound);
+        assertThat("Project is not found",projectfound,Matchers.is(true));
     }
 
     @Test
@@ -106,26 +102,19 @@ public class MyTests extends BaseTest implements Generators {
         ProjectPage projectPage = new ProjectPage(wd).get();
         projectPage.buildProject();
         BuildsPage buildsPage = projectPage.openLatestBuild();
-        assertTrue(buildsPage.getConsoleOutputText().contains("SUCCESS"));
+        assertThat(buildsPage.getConsoleOutputText(), Matchers.containsString("SUCCESS"));
     }
 
     @Test
     public void testSearch() {
-        Arrays.stream(new HomePage(wd).get().search("Exis"))
-                .forEach(System.out::println);
+        assertThat(new HomePage(wd).get().getSearchResults("a").length, Matchers.notNullValue());
     }
 
     @Test
     public void testProjectSearch() {
         HomePage homePage = new HomePage(wd).get();
         ProjectPage projectPage = homePage.searchForProject("Exis");
-    }
-
-    @Test
-    public void testPeopleSearch() {
-        PeoplePage peoplePage = new PeoplePage(wd).get();
-        peoplePage.deleteTestUsers();
-        System.out.println(" ");
+        assertThat("Wrong project",projectPage.getMainPanelText(),Matchers.containsString(getExistingProjectName()));
     }
 
     @Test
@@ -135,22 +124,31 @@ public class MyTests extends BaseTest implements Generators {
         freestylePropertiesPage.addDescription(generateNewProjectDescription());
         freestylePropertiesPage.checkTriggerBuildsRemotely();
         freestylePropertiesPage.addWindowsBatchCommand();
-
         ProjectPage projectPage = freestylePropertiesPage.save();
+
+        int builds = projectPage.countBuildsBeforeAction();
 
         Thread newThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                int builds = projectPage.countBuildsBeforeAction();
-                projectPage.waitForNewBuild(builds);
+                new JenkinsAPI().sendPostRequest(newProjectName, "build");
             }
         });
         newThread.start();
 
-        new JenkinsAPI().sendPostRequest(newProjectName, "build");
+        projectPage.waitForNewBuild(builds);
+
         try{
             newThread.join();
         } catch (InterruptedException e){}
-        projectPage.waitForBuildToEnd();
+        BuildsPage buildsPage = projectPage.waitForBuildToEnd();
+        assertThat(buildsPage.getConsoleOutputText(),Matchers.containsString("173.194.113.201"));
+    }
+
+    @Test
+    public void failedTest(){
+        UserHomePage userHomePage = new UserHomePage(wd).get();
+        userHomePage.openTab(tabName);
+        assertThat("No such tab", userHomePage.getPageTitle(), Matchers.containsString(tabName));
     }
 }
