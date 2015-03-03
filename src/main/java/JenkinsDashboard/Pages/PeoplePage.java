@@ -1,15 +1,14 @@
 package JenkinsDashboard.Pages;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.PageFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static utils.PagesURLs.*;
 
 public class PeoplePage extends SecuredPage<PeoplePage> {
 
@@ -21,6 +20,10 @@ public class PeoplePage extends SecuredPage<PeoplePage> {
 
     public PeoplePage(WebDriver wd) {
         super(wd);
+    }
+
+    public PeoplePage(WebDriver wd, boolean b) {
+        super(wd, b);
     }
 
     /**
@@ -38,40 +41,36 @@ public class PeoplePage extends SecuredPage<PeoplePage> {
 
     @Override
     public String getPageURL() {
-        return "http://seltr-kbp1-1.synapse.com:8080/asynchPeople/";
+        return PEOPLE_PAGE;
     }
 
     @Override
     protected void checkUniqueElements() throws Error {
         mainPanel.getText().contains("Includes all known “users”");
+        givePeopleElementsID();
     }
 
     public List<String> getPeopleNameByTemplate(String template){
         List<String> peopleNames = new ArrayList<>();
-        for (WebElement currentName : people) {
-            if (currentName.getText().contains(template)){
-                peopleNames.add(currentName.getText());
-            }
-        }
+        people.stream()
+                .filter(currentName -> currentName.getText().contains(template))
+                .forEach(name -> peopleNames.add(name.getText()));
         return peopleNames;
     }
 
     public void deleteTestUsers() {
-        List<String> names = getPeopleNameByTemplate("Test-Name ");
-        for (String currentUser : names) {
-            openUser(currentUser).deleteUserAndReturnToPeoplePage();
-            givePeopleElementsID();
-            PageFactory.initElements(wd,this);
-        }
+        getPeopleNameByTemplate("Test-Name ").stream().forEach(currentUser -> openUser(currentUser)
+                .deleteUserAndReturnToPeoplePage());
     }
 
     public UserPage openUser(String userName) {
-        for (WebElement currentName : people) {
-            if (currentName.getText().equals(userName)) {
-                currentName.click();
-                break;
-            }
+        try {
+            people.stream()
+                    .filter(currentName -> currentName.getText().equals(userName))
+                    .forEach(name -> name.click());
+        } catch (StaleElementReferenceException e){
+
         }
-        return new UserPage(wd);
+        return new UserPage(wd, true);
     }
 }

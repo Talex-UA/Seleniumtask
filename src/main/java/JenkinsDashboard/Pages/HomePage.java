@@ -7,6 +7,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import static utils.PagesURLs.*;
+
 public class HomePage extends Page<HomePage>{
 
     public HomePage(WebDriver wd){
@@ -19,6 +21,10 @@ public class HomePage extends Page<HomePage>{
     @FindBy(css = ".login>a[href*=signup]") // css = ".login>a[href*=signup]" xpath = "//*[@id='header']/div[2]/a[2]"
     private WebElement signUp;
 
+    public HomePage(WebDriver wd, boolean b) {
+        super(wd, b);
+    }
+
     public HomePage gotoHomePage() {
         jenkinsIcon.click();
         return new HomePage(wd);
@@ -26,7 +32,7 @@ public class HomePage extends Page<HomePage>{
 
     @Override
     public String getPageURL() {
-        return "http://seltr-kbp1-1.synapse.com:8080/";
+        return HOME_PAGE;
     }
 
     @Override
@@ -36,12 +42,12 @@ public class HomePage extends Page<HomePage>{
 
     public SignUpPage gotoSignUpPage(){
         signUp.click();
-        return new SignUpPage(wd);
+        return new SignUpPage(wd, true);
     }
 
     public LogInPage gotoLogInPage(){
         logIn.click();
-        return new LogInPage(wd);
+        return new LogInPage(wd, true);
     }
 
 }

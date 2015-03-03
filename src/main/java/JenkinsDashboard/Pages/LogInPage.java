@@ -5,6 +5,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import static utils.PagesURLs.*;
+
 public class LogInPage extends Page<LogInPage>{
 
     @FindBy (name = "j_username")
@@ -20,14 +22,18 @@ public class LogInPage extends Page<LogInPage>{
         super(wd);
     }
 
+    public LogInPage(WebDriver wd, boolean b) {
+        super(wd, b);
+    }
+
     public HomePage gotoHomePage() {
         jenkinsIcon.click();
-        return new HomePage(wd);
+        return new HomePage(wd, true);
     }
 
     @Override
     public String getPageURL() {
-        return "http://seltr-kbp1-1.synapse.com:8080/login?from=%2F";
+        return LOG_IN_PAGE;
     }
 
     @Override
@@ -35,17 +41,17 @@ public class LogInPage extends Page<LogInPage>{
         logInButton.isDisplayed();
     }
 
-    public UserHomePage logIn(String USER_NAME, String PASSWORD){
-        username.sendKeys(USER_NAME);
-        password.sendKeys(PASSWORD);
+    public UserHomePage logIn(String userName, String password){
+        username.sendKeys(userName);
+        this.password.sendKeys(password);
         logInButton.click();
-        return new UserHomePage(wd);
+        return new UserHomePage(wd, true);
     }
 
-    public WrongLogInPage logInWithWrongCredentials(String USER_NAME, String PASSWORD){
-        username.sendKeys(USER_NAME);
-        password.sendKeys(PASSWORD);
+    public WrongLogInPage logInWithWrongCredentials(String userName, String password){
+        username.sendKeys(userName);
+        this.password.sendKeys(password);
         logInButton.click();
-        return new WrongLogInPage(wd);
+        return new WrongLogInPage(wd, true);
     }
 }

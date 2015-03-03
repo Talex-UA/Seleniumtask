@@ -25,6 +25,10 @@ public abstract class SecuredPage <T extends SecuredPage<T>>extends Page<T> {
         super(wd);
     }
 
+    public SecuredPage(WebDriver wd, boolean b) {
+        super(wd, b);
+    }
+
     @Override
     protected void load() {
         super.load();

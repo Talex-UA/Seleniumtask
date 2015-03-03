@@ -5,6 +5,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import static utils.PagesURLs.*;
+
 /**
     *This class is the same as NewItemPage, but extended from SecuredPage abstract class.
  */
@@ -23,9 +25,13 @@ public class NewItemPage extends SecuredPage<NewItemPage> {
     @FindBy (id = "ok-button")
     private WebElement oKbutton;
 
+    public NewItemPage(WebDriver wd, boolean b) {
+        super(wd, b);
+    }
+
     @Override
     public String getPageURL() {
-        return "http://seltr-kbp1-1.synapse.com:8080/view/All/newJob";
+        return NEW_ITEM_PAGE;
     }
 
     @Override
@@ -33,7 +39,7 @@ public class NewItemPage extends SecuredPage<NewItemPage> {
         itemName.isDisplayed();
     }
 
-    public FreestylePropertiesPage setFreestyleProject(String itemName){
+    public FreestylePropertiesPage setUpFreestyleProject(String itemName){
         this.itemName.sendKeys(itemName);
         freestyleProject.click();
         oKbutton.click();

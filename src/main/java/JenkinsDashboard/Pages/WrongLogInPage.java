@@ -4,6 +4,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import static utils.PagesURLs.*;
 
 public class WrongLogInPage extends Page<WrongLogInPage> {
 
@@ -17,6 +18,10 @@ public class WrongLogInPage extends Page<WrongLogInPage> {
         super(wd);
     }
 
+    public WrongLogInPage(WebDriver wd, boolean b) {
+        super(wd, b);
+    }
+
     public HomePage gotoHomePage() {
         jenkinsIcon.click();
         return new HomePage(wd);
@@ -24,7 +29,7 @@ public class WrongLogInPage extends Page<WrongLogInPage> {
 
     @Override
     public String getPageURL() {
-        return "http://seltr-kbp1-1.synapse.com:8080/loginError";
+        return WRONG_LOGIN_PAGE;
     }
 
     @Override
@@ -34,7 +39,7 @@ public class WrongLogInPage extends Page<WrongLogInPage> {
 
     public LogInPage tryAgain(){
         tryAgain.click();
-        return new LogInPage(wd);
+        return new LogInPage(wd, true);
     }
 
     public String getMainPanelText(){

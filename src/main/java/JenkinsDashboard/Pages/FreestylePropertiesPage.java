@@ -10,6 +10,7 @@ import org.openqa.selenium.support.FindBys;
 import java.util.List;
 
 import static utils.Generators.*;
+import static utils.PagesURLs.*;
 
 public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage> {
 
@@ -65,7 +66,7 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
 
     @Override
     public String getPageURL() {
-        return "http://seltr-kbp1-1.synapse.com:8080/job/" + getExistingProjectName() + "/configure";
+        return FREESTYLE_PROPERTIES_PAGE;
     }
 
     @Override
@@ -73,8 +74,9 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
         description.isDisplayed();
     }
 
-    public void addDescription(String description) {
-        this.description.sendKeys(description);
+    public FreestylePropertiesPage addDescription(String stringDescription) {
+        description.sendKeys(stringDescription);
+        return new FreestylePropertiesPage(wd);
     }
 
     public void checkDiscardOldBuilds() {
@@ -115,11 +117,13 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
         }
     }
 
-    public void checkTriggerBuildsRemotely() {
+    public FreestylePropertiesPage checkTriggerBuildsRemotely() {
         if (!triggerBuildsRemotely.isSelected()) {
             triggerBuildsRemotely.click();
             authomationToken.sendKeys(getBuildToken());
+            return new FreestylePropertiesPage(wd);
         }
+        return this;
     }
 
     public void checkBuildAfterOtherProjectsAreBuilt() {
@@ -145,7 +149,7 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
         return new ProjectPage(wd);
     }
 
-    public void addWindowsBatchCommand() {
+    public FreestylePropertiesPage addWindowsBatchCommand() {
         try {
             addBuildStepButton.click();
             while (!executeWindowsBatchCommand.isDisplayed()) {
@@ -171,5 +175,6 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
         } catch (UnhandledAlertException uae) {
             uae.printStackTrace();
         }
+        return new FreestylePropertiesPage(wd);
     }
 }

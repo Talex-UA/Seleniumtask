@@ -38,7 +38,7 @@ public class JenkinsAPI{
         } else if(actionTrigger.equals("enable")) {
             finalURL = "http://seltr-kbp1-1.synapse.com:8080/job/"+projectName.replaceAll("\\s+","%20")+"/enable";
         } else {
-            System.out.println("Wrong trigger: "+actionTrigger);
+            log.info("Wrong trigger: "+actionTrigger);
             return;
         }
 

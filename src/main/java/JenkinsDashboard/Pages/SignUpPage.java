@@ -4,23 +4,24 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import static utils.PagesURLs.*;
 
 public class SignUpPage extends Page<SignUpPage>{
 
     @FindBy (name = "username")
-    private WebElement username;
+    private WebElement usernameField;
 
     @FindBy (name = "password1")
-    private WebElement password;
+    private WebElement passwordField;
 
     @FindBy (name = "password2")
     private WebElement confirm_password;
 
     @FindBy (name = "fullname")
-    private WebElement fullname;
+    private WebElement fullnameField;
 
     @FindBy (name = "email")
-    private WebElement email;
+    private WebElement emailField;
 
     @FindBy (id = "yui-gen1-button")
     private WebElement signUpButton;
@@ -31,21 +32,22 @@ public class SignUpPage extends Page<SignUpPage>{
     @FindBy (id = "main-panel-content")
     private WebElement mainPanel;
 
-    @FindBy (className = "error")
-    private WebElement errorMessage;
-
     public SignUpPage(WebDriver wd){
         super(wd);
     }
 
+    public SignUpPage(WebDriver wd, boolean b) {
+        super(wd, b);
+    }
+
     public HomePage gotoHomePage() {
         jenkinsIcon.click();
-        return new HomePage(wd);
+        return new HomePage(wd, true);
     }
 
     @Override
     public String getPageURL() {
-        return "http://seltr-kbp1-1.synapse.com:8080/signup";
+        return SIGN_UP_PAGE;
     }
 
     @Override
@@ -53,31 +55,30 @@ public class SignUpPage extends Page<SignUpPage>{
         confirm_password.isDisplayed();
     }
 
-    public UserHomePage signUpNewUser(String USER_NAME, String PASSWORD, String FULL_NAME, String EMAIL){
-        username.sendKeys(USER_NAME);
-        password.sendKeys(PASSWORD);
-        confirm_password.sendKeys(PASSWORD);
-        fullname.sendKeys(FULL_NAME);
-        email.sendKeys(EMAIL);
+    public UserHomePage signUpNewUser(String userName, String password, String fullName, String email){
+        usernameField.sendKeys(userName);
+        passwordField.sendKeys(password);
+        confirm_password.sendKeys(password);
+        fullnameField.sendKeys(fullName);
+        emailField.sendKeys(email);
         signUpButton.click();
         gotoTopPage.click();
-        return new UserHomePage(wd);
+        return new UserHomePage(wd, true);
     }
 
-    public void signUpExistingNameUser(String USER_NAME, String PASSWORD, String FULL_NAME, String EMAIL){
-        username.sendKeys(USER_NAME);
-        password.sendKeys(PASSWORD);
-        confirm_password.sendKeys(PASSWORD);
-        fullname.sendKeys(FULL_NAME);
-        email.sendKeys(EMAIL);
+    public WrongSignUpPage signUpExistingNameUser(String userName, String password, String fullName, String email){
+        usernameField.sendKeys(userName);
+        passwordField.sendKeys(password);
+        confirm_password.sendKeys(password);
+        fullnameField.sendKeys(fullName);
+        emailField.sendKeys(email);
         signUpButton.click();
+        return new WrongSignUpPage(wd, true);
     }
 
     public String getMainPanelText(){
         return mainPanel.getText();
     }
 
-    public boolean checkForError(){
-        return errorMessage.isDisplayed();
-    }
+
 }

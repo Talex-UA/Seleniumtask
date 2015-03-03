@@ -5,6 +5,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import static utils.Generators.*;
+import static utils.PagesURLs.*;
 
 public class UserPage extends SecuredPage<UserPage>{
 
@@ -21,9 +22,13 @@ public class UserPage extends SecuredPage<UserPage>{
         super(wd);
     }
 
+    public UserPage(WebDriver wd, boolean b) {
+        super(wd, b);
+    }
+
     @Override
     public String getPageURL() {
-        return "http://seltr-kbp1-1.synapse.com:8080/user/"+getExistingUserName()+"/";
+        return USER_PAGE;
     }
 
     @Override
@@ -35,6 +40,6 @@ public class UserPage extends SecuredPage<UserPage>{
         deleteUser.click();
         yesButton.click();
         goToPeoplePage.click();
-        return new PeoplePage(wd);
+        return new PeoplePage(wd, true);
     }
 }

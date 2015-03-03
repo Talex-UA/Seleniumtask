@@ -9,6 +9,7 @@ import org.openqa.selenium.support.FindBys;
 import java.util.List;
 
 import static utils.Generators.*;
+import static utils.PagesURLs.*;
 
 public class ProjectPage extends SecuredPage<ProjectPage> {
 
@@ -40,9 +41,13 @@ public class ProjectPage extends SecuredPage<ProjectPage> {
         super(wd);
     }
 
+    public ProjectPage(WebDriver wd, boolean b) {
+        super(wd, b);
+    }
+
     @Override
     public String getPageURL() {
-        return "http://seltr-kbp1-1.synapse.com:8080/job/" + getExistingProjectName() + "/";
+        return PROJECT_PAGE;
     }
 
     @Override
@@ -51,22 +56,13 @@ public class ProjectPage extends SecuredPage<ProjectPage> {
     }
 
     public ProjectPage buildProject(){
-        int before = builds.size();
         buildNow.click();
-        int after = builds.size();
-        while (after-before!=1) {
-            try {
-                Thread.sleep(500);
-            }
-            catch (InterruptedException e){}
-            after=builds.size();
-        }
-        return new ProjectPage(wd);
+        return new ProjectPage(wd, true);
     }
 
     public UserHomePage backToDashboard() {
         backToDashBoard.click();
-        return new UserHomePage(wd);
+        return new UserHomePage(wd, true);
     }
 
     public String getMainPanelText() {
@@ -75,14 +71,14 @@ public class ProjectPage extends SecuredPage<ProjectPage> {
 
     public BuildsPage openLatestBuild(){
         builds.get(0).click();
-        return new BuildsPage(wd);
+        return new BuildsPage(wd, true);
     }
 
     public int countBuildsBeforeAction(){
         return builds.size();
     }
 
-    public void waitForNewBuild(int countBuildsBeforeAction){
+    public ProjectPage waitForNewBuild(int countBuildsBeforeAction){
         int countBuildsAfterAction = builds.size();
         while (countBuildsAfterAction-countBuildsBeforeAction!=1) {
             try {
@@ -91,6 +87,7 @@ public class ProjectPage extends SecuredPage<ProjectPage> {
             catch (InterruptedException e){}
             countBuildsAfterAction=builds.size();
         }
+        return new ProjectPage(wd, true);
     }
 
     public BuildsPage waitForBuildToEnd(){
@@ -101,6 +98,6 @@ public class ProjectPage extends SecuredPage<ProjectPage> {
             }
             catch (InterruptedException e){}
         }
-        return new BuildsPage(wd);
+        return new BuildsPage(wd, true);
     }
 }

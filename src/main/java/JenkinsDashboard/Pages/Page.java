@@ -12,10 +12,12 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.LoadableComponent;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class Page<T extends Page<T>> extends LoadableComponent<T> {
 
+    private static final long MY_CUSTOM_SLEEP = 200;
     protected final Logger log = LogManager.getLogger(this);
     protected final WebDriver wd;
 
@@ -33,6 +35,14 @@ public abstract class Page<T extends Page<T>> extends LoadableComponent<T> {
         PageFactory.initElements(wd, this);
     }
 
+    protected Page(WebDriver wd, boolean ifToCheck) {
+        this.wd = wd;
+        PageFactory.initElements(wd, this);
+        if (ifToCheck) {
+            checkUniqueElements();
+        }
+    }
+
     public List<WebElement> search(String pattern) {
         Actions actions = new Actions(wd);
         actions.moveToElement(searchBox)
@@ -41,14 +51,9 @@ public abstract class Page<T extends Page<T>> extends LoadableComponent<T> {
                 .clickAndHold(searchBox)
                 .perform();
 
-        List<WebElement> elements;
-        try {
-            elements = new WebDriverWait(wd, 5, 200)
-                    .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(".yui-ac-bd li:not([style])")));
-            actions.release(searchBox).perform();
-        } catch (TimeoutException e) {
-            throw e;
-        }
+        List<WebElement> elements = new WebDriverWait(wd, 5, MY_CUSTOM_SLEEP)
+                .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(".yui-ac-bd li:not([style])")));
+        actions.release(searchBox).perform();
         return elements;
     }
 
@@ -56,22 +61,14 @@ public abstract class Page<T extends Page<T>> extends LoadableComponent<T> {
         List<WebElement> elements = search(pattern);
         String[] result = new String[elements.size()];
 
-        int index = 0;
-        for (WebElement item : elements) {
-            result[index++] = item.getText();
-        }
+        elements.stream().forEach(element -> result[elements.indexOf(element)] = element.getText());
         return result;
     }
 
     public ProjectPage searchForProject(String pattern) {
-        List<WebElement> elements = search(pattern);
-
-        for (WebElement item : elements) {
-            if (item.getText().contains(pattern)) {
-                item.click();
-                break;
-            }
-        }
+        search(pattern).stream()
+                .filter(project -> project.getText().contains(pattern))
+                .forEach(item -> item.click());
         searchBox.submit();
         return new ProjectPage(wd);
     }

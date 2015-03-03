@@ -7,33 +7,25 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import utils.web.JenkinsAPI;
 
+import java.util.List;
+import java.util.function.Predicate;
+
+import static utils.CommonMethods.pingGoogle;
 import static utils.Generators.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith(JUnit4.class)
 public class MyTests extends BaseTest {
 
-    private String existingUserName = getExistingUserName();
-    private String existingUserFulName = getExistingUserFulName();
-    private String existingProjectName = getExistingProjectName();
-    private String password = getPassword();
-
     private String newUserFullName = generateNewUserFullName();
-    private String newUserEmail = generateNewUserEmail();
     private String newProjectName = generateNewProjectName();
 
     private String tabName = generateString(10);
 
-    private LogInPage loginPage;
-
-    @Before
-    public void before() {
-        loginPage = new LogInPage(wd);
-    }
-
     @After
-    public void logOutIfLoggedIn() {
+    public void cleanUp() {
         wd.manage().deleteAllCookies();
+        wd.navigate().refresh();
     }
 
     @AfterClass
@@ -44,111 +36,107 @@ public class MyTests extends BaseTest {
     }
 
     @Test
-    public void LogInTest() {
-        loginPage.get();
-        UserHomePage userHomePage = loginPage.logIn(existingUserName, password);
-        assertThat(userHomePage.getUserName(), Matchers.containsString(existingUserFulName));
+    public void logInTest() {
+        assertThat(new LogInPage(wd).get()
+                        .logIn(getExistingUserName(), getPassword())
+                        .getUserName(),
+                Matchers.containsString(getExistingUserFulName()));
     }
 
     @Test
-    public void LogInWrongCredentials() {
-        LogInPage logInPage = new LogInPage(wd).get();
-        WrongLogInPage wrongLogInPage = logInPage.logInWithWrongCredentials("asfaf", "segwf");
-        assertThat(wrongLogInPage.checkForError(), Matchers.is(true));
+    public void logInWrongCredentials() {
+        assertThat(new LogInPage(wd).get()
+                        .logInWithWrongCredentials(generateString(10), generateString(7))
+                        .getMainPanelText(),
+                Matchers.containsString("Try again"));
     }
 
     @Test
-    public void SignUpNewUserTest() {
-        SignUpPage signUpPage = new SignUpPage(wd).get();
-        UserHomePage userHomePage = signUpPage.signUpNewUser(generateNewUserName(), password, newUserFullName, newUserEmail);
+    public void signUpNewUserTest() {
+        UserHomePage userHomePage = new SignUpPage(wd).get()
+                .signUpNewUser(generateNewUserName(), getPassword(), newUserFullName, generateNewUserEmail());
         assertThat(userHomePage.getUserName(), Matchers.containsString(newUserFullName));
     }
 
     @Test
-    public void SignUpExistingNameUser() {
-        SignUpPage signUpPage = new SignUpPage(wd).get();
-        signUpPage.signUpExistingNameUser(existingUserName, password, newUserFullName, newUserEmail);
-        assertThat(signUpPage.checkForError(), Matchers.is(true));
+    public void signUpExistingNameUser() {
+        assertThat(new SignUpPage(wd).get()
+                        .signUpExistingNameUser(getExistingUserName(), getPassword(), generateNewUserFullName(), generateNewUserEmail())
+                        .getErrorClass(),
+                Matchers.containsString("error"));
     }
 
     @Test
     public void openExistingProject() {
-        UserHomePage userHomePage = new UserHomePage(wd).get();
-        ProjectPage projectPage = userHomePage.openProject(existingProjectName);
-        assertThat("Project not found", projectPage.getMainPanelText(), Matchers.containsString(existingProjectName));
+        assertThat("Project not found", new UserHomePage(wd).get()
+                        .openProject(getExistingProjectName())
+                        .getMainPanelText(),
+                Matchers.containsString(getExistingProjectName()));
     }
 
     @Test
     public void newProjectTest() {
-        NewItemPage newItemPage = new NewItemPage(wd).get();
-        FreestylePropertiesPage freestylePropertiesPage = newItemPage.setFreestyleProject(newProjectName);
-        freestylePropertiesPage.addDescription(generateNewProjectDescription());
-        ProjectPage projectPage = freestylePropertiesPage.save();
+        UserHomePage userHomePage = new NewItemPage(wd).get()
+                .setUpFreestyleProject(newProjectName)
+                .addDescription(generateNewProjectDescription())
+                .save()
+                .backToDashboard();
 
-        UserHomePage userHomePage = projectPage.backToDashboard();
-
-        boolean projectfound = false;
-        for (String currentProject : userHomePage.getProjectsNames()) {
-            if (currentProject.equals(newProjectName)) {
-                projectfound = true;
-                break;
-            }
-        }
-        assertThat("Project is not found",projectfound,Matchers.is(true));
+        assertThat("Project is not found", userHomePage.getProjectsNames().stream().anyMatch(Predicate.isEqual(newProjectName)), Matchers.is(true));
     }
 
     @Test
     public void buildExisting() {
-        ProjectPage projectPage = new ProjectPage(wd).get();
-        projectPage.buildProject();
-        BuildsPage buildsPage = projectPage.openLatestBuild();
-        assertThat(buildsPage.getConsoleOutputText(), Matchers.containsString("SUCCESS"));
+        assertThat(new ProjectPage(wd).get()
+                        .buildProject()
+                        .openLatestBuild()
+                        .getConsoleOutputText(),
+                Matchers.containsString("SUCCESS"));
     }
 
     @Test
     public void testSearch() {
-        assertThat(new HomePage(wd).get().getSearchResults("a").length, Matchers.notNullValue());
+        assertThat(new HomePage(wd).get()
+                        .getSearchResults("a").length,
+                Matchers.notNullValue());
     }
 
     @Test
     public void testProjectSearch() {
-        HomePage homePage = new HomePage(wd).get();
-        ProjectPage projectPage = homePage.searchForProject("Exis");
-        assertThat("Wrong project",projectPage.getMainPanelText(),Matchers.containsString(getExistingProjectName()));
+        assertThat("Wrong project", new HomePage(wd).get()
+                        .searchForProject("Exis")
+                        .getMainPanelText(),
+                Matchers.containsString(getExistingProjectName()));
     }
 
     @Test
     public void testNewProjectWithPing() {
-        NewItemPage newItemPage = new NewItemPage(wd).get();
-        FreestylePropertiesPage freestylePropertiesPage = newItemPage.setFreestyleProject(newProjectName);
-        freestylePropertiesPage.addDescription(generateNewProjectDescription());
-        freestylePropertiesPage.checkTriggerBuildsRemotely();
-        freestylePropertiesPage.addWindowsBatchCommand();
-        ProjectPage projectPage = freestylePropertiesPage.save();
+        ProjectPage projectPage = new NewItemPage(wd).get()
+                .setUpFreestyleProject(newProjectName)
+                .addDescription(generateNewProjectDescription())
+                .checkTriggerBuildsRemotely()
+                .addWindowsBatchCommand()
+                .save();
 
         int builds = projectPage.countBuildsBeforeAction();
 
-        Thread newThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                new JenkinsAPI().sendPostRequest(newProjectName, "build");
-            }
-        });
-        newThread.start();
+        new Thread(
+                () -> new JenkinsAPI().sendPostRequest(newProjectName, "build")
+        ).start();
 
-        projectPage.waitForNewBuild(builds);
+        List<String> pingOutput = pingGoogle(1, 1);
 
-        try{
-            newThread.join();
-        } catch (InterruptedException e){}
-        BuildsPage buildsPage = projectPage.waitForBuildToEnd();
-        assertThat(buildsPage.getConsoleOutputText(),Matchers.containsString("173.194.113.201"));
+        assertThat(projectPage.waitForNewBuild(builds)
+                        .waitForBuildToEnd()
+                        .getConsoleOutputText(),
+                Matchers.containsString(pingOutput.get(2).substring(11, 26)));
     }
 
     @Test
-    public void failedTest(){
-        UserHomePage userHomePage = new UserHomePage(wd).get();
-        userHomePage.openTab(tabName);
-        assertThat("No such tab", userHomePage.getPageTitle(), Matchers.containsString(tabName));
+    public void failedTest() {
+        assertThat("No such tab", new UserHomePage(wd).get()
+                        .openTab(tabName)
+                        .getPageTitle(),
+                Matchers.containsString(tabName));
     }
 }

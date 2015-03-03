@@ -7,7 +7,9 @@ import org.openqa.selenium.support.FindBy;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static utils.Generators.*;
+import static utils.PagesURLs.*;
 
 public class BuildsPage extends SecuredPage<BuildsPage>{
 
@@ -24,14 +26,18 @@ public class BuildsPage extends SecuredPage<BuildsPage>{
         super(wd);
     }
 
+    public BuildsPage(WebDriver wd, boolean b) {
+        super(wd, b);
+    }
+
     @Override
     public String getPageURL() {
-        return "http://seltr-kbp1-1.synapse.com:8080/job/"+getExistingProjectName()+"/";
+        return BUILDS_PAGE;
     }
 
     @Override
     protected void checkUniqueElements() throws Error {
-        Assert.assertThat(consoleOutput.getText(), Matchers.containsString("Console Output"));
+        assertThat(consoleOutput.getAttribute("src"), Matchers.containsString("terminal"));
     }
 
     public String getConsoleOutputText(){
@@ -41,11 +47,11 @@ public class BuildsPage extends SecuredPage<BuildsPage>{
 
     public UserHomePage backToDashboard(){
         jenkinsIcon.click();
-        return new UserHomePage(wd);
+        return new UserHomePage(wd, true);
     }
 
     public ProjectPage goBackToProject(){
         backToProject.click();
-        return new ProjectPage(wd);
+        return new ProjectPage(wd, true);
     }
 }
