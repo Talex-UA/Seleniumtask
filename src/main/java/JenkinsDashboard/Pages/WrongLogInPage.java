@@ -4,7 +4,8 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import static utils.PagesURLs.*;
+
+import static utils.PagesURLs.WRONG_LOGIN_PAGE;
 
 public class WrongLogInPage extends Page<WrongLogInPage> {
 

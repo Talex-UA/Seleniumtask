@@ -4,18 +4,19 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import static utils.Generators.*;
+import static utils.Generators.getExistingUserName;
+import static utils.Generators.getPassword;
 
 
-public abstract class SecuredPage <T extends SecuredPage<T>>extends Page<T> {
+public abstract class SecuredPage<T extends SecuredPage<T>> extends Page<T> {
 
-    @FindBy (name = "j_username")
+    @FindBy(name = "j_username")
     private WebElement username;
 
-    @FindBy (name = "j_password")
+    @FindBy(name = "j_password")
     private WebElement password;
 
-    @FindBy (id="yui-gen1-button")
+    @FindBy(id = "yui-gen1-button")
     private WebElement logInButton;
 
     @FindBy(css = ".login>a[href*=login]")
@@ -30,11 +31,18 @@ public abstract class SecuredPage <T extends SecuredPage<T>>extends Page<T> {
     }
 
     @Override
-    protected void load() {
-        super.load();
-        if (!isLoggedIn()) {
-            login();
+    public T get() {
+        try {
+            isLoaded();
+            return (T) this;
+        } catch (Error e) {
+            load();
+            if (!isLoggedIn()) {
+                login();
+            }
         }
+        isLoaded();
+        return (T) this;
     }
 
     protected void login() {

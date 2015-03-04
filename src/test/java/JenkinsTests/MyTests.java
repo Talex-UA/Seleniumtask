@@ -2,17 +2,19 @@ package JenkinsTests;
 
 import JenkinsDashboard.Pages.*;
 import org.hamcrest.Matchers;
-import org.junit.*;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Ignore;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import utils.web.JenkinsAPI;
 
-import java.util.List;
 import java.util.function.Predicate;
 
-import static utils.CommonMethods.pingGoogle;
-import static utils.Generators.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static utils.CommonMethods.getIPfromPingGoogle;
+import static utils.Generators.*;
 
 @RunWith(JUnit4.class)
 public class MyTests extends BaseTest {
@@ -124,14 +126,13 @@ public class MyTests extends BaseTest {
                 () -> new JenkinsAPI().sendPostRequest(newProjectName, "build")
         ).start();
 
-        List<String> pingOutput = pingGoogle(1, 1);
-
         assertThat(projectPage.waitForNewBuild(builds)
-                        .waitForBuildToEnd()
+                        .waitForBuildToEnd() // To be reworked
                         .getConsoleOutputText(),
-                Matchers.containsString(pingOutput.get(2).substring(11, 26)));
+                Matchers.containsString(getIPfromPingGoogle()));
     }
 
+    @Ignore
     @Test
     public void failedTest() {
         assertThat("No such tab", new UserHomePage(wd).get()

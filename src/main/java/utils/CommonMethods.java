@@ -13,35 +13,38 @@ public class CommonMethods {
     private static WebDriver wd;
 
     public static void sendKeysToField(WebElement element,String input){
-        if (input==null){
-
-        } else if (input.isEmpty()){
-            element.clear();
-        } else {
-            if (!element.getText().isEmpty()){
+        if (input!=null){
+            if (input.isEmpty()) {
                 element.clear();
+            } else {
+                element.sendKeys(input);
             }
-            element.sendKeys(input);
         }
     }
 
-    public static List<String> pingGoogle(int numberTimes, int wait){
+    private static List<String> pingGoogle(int numberTimes, int wait){
         List<String> pingOutput = new ArrayList<>();
         try {
             Process pingGoogle = Runtime.getRuntime().exec("ping 173.194.113.201" + " -w " + wait + " -n " + numberTimes);
-            Scanner scanner = new Scanner(pingGoogle.getInputStream()).useDelimiter("\\A");
-            String scannerOutput = "";
+            Scanner scanner = new Scanner(pingGoogle.getInputStream());
             while (scanner.hasNext()){
-                scannerOutput = scanner.next();
+                pingOutput.add(scanner.nextLine());
             }
             pingGoogle.waitFor();
-            String [] scannerOutputToArray = scannerOutput.split("\\r?\\n");
-            for (int i = 0; i < scannerOutputToArray.length; i++) {
-                pingOutput.add(scannerOutputToArray[i]);
-            }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
         return pingOutput;
+    }
+
+    public static String getIPfromPingGoogle(){
+        String foundIP="";
+        for (String current:pingGoogle(1,1)){
+            if (current.matches(".+\\d+.+")){
+                foundIP=current.substring(current.indexOf(" ")+1,current.indexOf(" ")+16);
+                break;
+            }
+        }
+        return foundIP;
     }
 }

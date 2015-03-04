@@ -7,8 +7,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import static utils.PagesURLs.*;
-
 public class HomePage extends Page<HomePage>{
 
     public HomePage(WebDriver wd){
@@ -32,7 +30,7 @@ public class HomePage extends Page<HomePage>{
 
     @Override
     public String getPageURL() {
-        return HOME_PAGE;
+        return String.format("%s",HOST);
     }
 
     @Override

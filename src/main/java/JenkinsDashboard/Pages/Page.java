@@ -4,7 +4,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -12,10 +15,11 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.LoadableComponent;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.Arrays;
 import java.util.List;
 
 public abstract class Page<T extends Page<T>> extends LoadableComponent<T> {
+
+    public static final String HOST = "http://seltr-kbp1-1.synapse.com:8080/";
 
     private static final long MY_CUSTOM_SLEEP = 200;
     protected final Logger log = LogManager.getLogger(this);
@@ -39,7 +43,7 @@ public abstract class Page<T extends Page<T>> extends LoadableComponent<T> {
         this.wd = wd;
         PageFactory.initElements(wd, this);
         if (ifToCheck) {
-            checkUniqueElements();
+            isLoaded();
         }
     }
 

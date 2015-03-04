@@ -5,7 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import static utils.PagesURLs.*;
+import static utils.PagesURLs.NEW_ITEM_PAGE;
 
 /**
     *This class is the same as NewItemPage, but extended from SecuredPage abstract class.
@@ -43,6 +43,11 @@ public class NewItemPage extends SecuredPage<NewItemPage> {
         this.itemName.sendKeys(itemName);
         freestyleProject.click();
         oKbutton.click();
-        return new FreestylePropertiesPage(wd);
+        return new FreestylePropertiesPage(wd, true){
+            @Override
+            public String getProjectName() {
+                return itemName;
+            }
+        };
     }
 }

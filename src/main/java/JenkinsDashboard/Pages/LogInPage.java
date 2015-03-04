@@ -3,9 +3,9 @@ package JenkinsDashboard.Pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
-import static utils.PagesURLs.*;
+import static utils.CommonMethods.sendKeysToField;
+import static utils.PagesURLs.LOG_IN_PAGE;
 
 public class LogInPage extends Page<LogInPage>{
 
@@ -13,7 +13,7 @@ public class LogInPage extends Page<LogInPage>{
     private WebElement username;
 
     @FindBy (name = "j_password")
-    private WebElement password;
+    private WebElement passwordField;
 
     @FindBy (id="yui-gen1-button")
     private WebElement logInButton;
@@ -42,15 +42,15 @@ public class LogInPage extends Page<LogInPage>{
     }
 
     public UserHomePage logIn(String userName, String password){
-        username.sendKeys(userName);
-        this.password.sendKeys(password);
+        sendKeysToField(username, userName);
+        sendKeysToField(passwordField, password);
         logInButton.click();
         return new UserHomePage(wd, true);
     }
 
     public WrongLogInPage logInWithWrongCredentials(String userName, String password){
-        username.sendKeys(userName);
-        this.password.sendKeys(password);
+        sendKeysToField(username, userName);
+        sendKeysToField(passwordField,password);
         logInButton.click();
         return new WrongLogInPage(wd, true);
     }

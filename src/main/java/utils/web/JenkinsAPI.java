@@ -8,7 +8,8 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import static utils.Generators.*;
+import static utils.Generators.getExistingUserName;
+import static utils.Generators.getPassword;
 
 public class JenkinsAPI{
 

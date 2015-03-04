@@ -4,7 +4,9 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import static utils.PagesURLs.*;
+
+import static utils.CommonMethods.sendKeysToField;
+import static utils.PagesURLs.SIGN_UP_PAGE;
 
 public class SignUpPage extends Page<SignUpPage>{
 
@@ -56,22 +58,22 @@ public class SignUpPage extends Page<SignUpPage>{
     }
 
     public UserHomePage signUpNewUser(String userName, String password, String fullName, String email){
-        usernameField.sendKeys(userName);
-        passwordField.sendKeys(password);
-        confirm_password.sendKeys(password);
-        fullnameField.sendKeys(fullName);
-        emailField.sendKeys(email);
+        sendKeysToField(usernameField, userName);
+        sendKeysToField(passwordField, password);
+        sendKeysToField(confirm_password, password);
+        sendKeysToField(fullnameField, fullName);
+        sendKeysToField(emailField, email);
         signUpButton.click();
         gotoTopPage.click();
         return new UserHomePage(wd, true);
     }
 
     public WrongSignUpPage signUpExistingNameUser(String userName, String password, String fullName, String email){
-        usernameField.sendKeys(userName);
-        passwordField.sendKeys(password);
-        confirm_password.sendKeys(password);
-        fullnameField.sendKeys(fullName);
-        emailField.sendKeys(email);
+        sendKeysToField(usernameField, userName);
+        sendKeysToField(passwordField, password);
+        sendKeysToField(confirm_password, password);
+        sendKeysToField(fullnameField, fullName);
+        sendKeysToField(emailField, email);
         signUpButton.click();
         return new WrongSignUpPage(wd, true);
     }

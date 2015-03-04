@@ -7,9 +7,8 @@ import utils.web.JenkinsAPI;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
-import static utils.PagesURLs.*;
+import static utils.PagesURLs.USER_HOME_PAGE;
 
 public class UserHomePage extends SecuredPage<UserHomePage> {
 

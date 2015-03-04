@@ -1,7 +1,7 @@
 package utils;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
 public class Generators {
@@ -20,30 +20,20 @@ public class Generators {
     }
 
     public static String generateNewUserName(){
-        Date date = new Date() ;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
-        return "Test-Name "+dateFormat.format(date);
+        return "Test-Name "+generateTimeAndDate();
     }
     public static String generateNewUserFullName(){
-        Date date = new Date() ;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
-        return "Test-FullName "+dateFormat.format(date);
+        return "Test-FullName "+generateTimeAndDate();
     }
     public static String generateNewUserEmail(){
-        Date date = new Date() ;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd:HH-mm-ss");
-        return "test_email"+dateFormat.format(date)+"@testemail.com";
+        return "test_email"+generateTimeAndDate()+"@testemail.com";
     }
     public static String generateNewProjectName(){
-        Date date = new Date() ;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
-        return "Test-Project "+dateFormat.format(date);
+        return "Test-Project "+generateTimeAndDate();
     }
 
     public static String generateNewProjectDescription(){
-        Date date = new Date() ;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
-        return "This is my new project "+dateFormat.format(date);
+        return "This is my new project "+generateTimeAndDate();
     }
 
     public static String getBuildToken(){
@@ -62,5 +52,10 @@ public class Generators {
             result += alphabet.charAt(random.nextInt(alphabet.length()));
         }
         return result;
+    }
+
+    public static String generateTimeAndDate(){
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm-ss");
+        return LocalDateTime.now().format(dateTimeFormatter);
     }
 }

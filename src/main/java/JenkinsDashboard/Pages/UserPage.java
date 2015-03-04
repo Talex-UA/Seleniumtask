@@ -4,8 +4,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import static utils.Generators.*;
-import static utils.PagesURLs.*;
+import static utils.Generators.getExistingUserName;
 
 public class UserPage extends SecuredPage<UserPage>{
 
@@ -26,9 +25,13 @@ public class UserPage extends SecuredPage<UserPage>{
         super(wd, b);
     }
 
+    public String getUserName() {
+        return getExistingUserName();
+    }
+
     @Override
     public String getPageURL() {
-        return USER_PAGE;
+        return HOST + "user/" + getUserName().replace(" ","%20").toLowerCase() + "/";
     }
 
     @Override
@@ -40,6 +43,6 @@ public class UserPage extends SecuredPage<UserPage>{
         deleteUser.click();
         yesButton.click();
         goToPeoplePage.click();
-        return new PeoplePage(wd, true);
+        return new PeoplePage(wd, true).get();
     }
 }

@@ -1,11 +1,5 @@
 package JenkinsTests;
 
-import JenkinsDashboard.Pages.HomePage;
-import JenkinsDashboard.Pages.LogInPage;
-import JenkinsDashboard.Pages.Page;
-import JenkinsDashboard.Pages.SignUpPage;
-import utils.Browser;
-import utils.web.WebDriverController;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -14,12 +8,12 @@ import org.junit.*;
 import org.junit.internal.runners.statements.FailOnTimeout;
 import org.junit.rules.*;
 import org.junit.runner.Description;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 import org.junit.runners.model.Statement;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import utils.Browser;
+import utils.web.WebDriverController;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,8 +24,6 @@ import java.nio.file.StandardCopyOption;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-
-import static junit.framework.TestCase.assertTrue;
 
 public class BaseTest {
 

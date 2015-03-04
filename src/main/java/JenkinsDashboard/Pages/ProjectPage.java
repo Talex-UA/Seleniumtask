@@ -8,8 +8,7 @@ import org.openqa.selenium.support.FindBys;
 
 import java.util.List;
 
-import static utils.Generators.*;
-import static utils.PagesURLs.*;
+import static utils.Generators.getExistingProjectName;
 
 public class ProjectPage extends SecuredPage<ProjectPage> {
 
@@ -45,9 +44,13 @@ public class ProjectPage extends SecuredPage<ProjectPage> {
         super(wd, b);
     }
 
+    public String getProjectName(){
+        return getExistingProjectName();
+    }
+
     @Override
     public String getPageURL() {
-        return PROJECT_PAGE;
+        return HOST + "job/"+ getProjectName().replace(" ","%20").toLowerCase() + "/";
     }
 
     @Override
@@ -70,8 +73,18 @@ public class ProjectPage extends SecuredPage<ProjectPage> {
     }
 
     public BuildsPage openLatestBuild(){
+        String buildNumber = builds.get(0).getText().substring(1).trim();
         builds.get(0).click();
-        return new BuildsPage(wd, true);
+        return new BuildsPage(wd, true){
+            @Override
+            public String getBuildNumber(){
+                return buildNumber;
+            }
+            @Override
+            public String getProjectName(){
+                return ProjectPage.this.getProjectName();
+            }
+        };
     }
 
     public int countBuildsBeforeAction(){
@@ -87,7 +100,7 @@ public class ProjectPage extends SecuredPage<ProjectPage> {
             catch (InterruptedException e){}
             countBuildsAfterAction=builds.size();
         }
-        return new ProjectPage(wd, true);
+        return this;
     }
 
     public BuildsPage waitForBuildToEnd(){

@@ -4,7 +4,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import static utils.PagesURLs.*;
+import static utils.PagesURLs.WRONG_SIGNUP_PAGE;
 
 public class WrongSignUpPage extends Page<SignUpPage> {
 

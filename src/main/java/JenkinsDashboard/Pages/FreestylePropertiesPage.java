@@ -1,5 +1,6 @@
 package JenkinsDashboard.Pages;
 
+import org.hamcrest.Matchers;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
@@ -9,8 +10,8 @@ import org.openqa.selenium.support.FindBys;
 
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static utils.Generators.*;
-import static utils.PagesURLs.*;
 
 public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage> {
 
@@ -64,19 +65,27 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
         super(wd);
     }
 
+    public FreestylePropertiesPage(WebDriver wd, boolean b) {
+        super(wd, b);
+    }
+
+    public String getProjectName() {
+        return getExistingProjectName();
+    }
+
     @Override
     public String getPageURL() {
-        return FREESTYLE_PROPERTIES_PAGE;
+        return HOST + "job/" + getProjectName().replace(" ", "%20") + "/configure";
     }
 
     @Override
     protected void checkUniqueElements() throws NoSuchElementException {
-        description.isDisplayed();
+        assertThat(description.isDisplayed(), Matchers.is(true));
     }
 
     public FreestylePropertiesPage addDescription(String stringDescription) {
         description.sendKeys(stringDescription);
-        return new FreestylePropertiesPage(wd);
+        return this;
     }
 
     public void checkDiscardOldBuilds() {
@@ -121,7 +130,6 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
         if (!triggerBuildsRemotely.isSelected()) {
             triggerBuildsRemotely.click();
             authomationToken.sendKeys(getBuildToken());
-            return new FreestylePropertiesPage(wd);
         }
         return this;
     }
@@ -146,7 +154,13 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
 
     public ProjectPage save() {
         saveButton.click();
-        return new ProjectPage(wd);
+        System.out.println(FreestylePropertiesPage.this.getProjectName());
+        return new ProjectPage(wd, true) {
+            @Override
+            public String getProjectName() {
+                return FreestylePropertiesPage.this.getProjectName();
+            }
+        };
     }
 
     public FreestylePropertiesPage addWindowsBatchCommand() {
@@ -155,7 +169,7 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
             while (!executeWindowsBatchCommand.isDisplayed()) {
                 try {
                     Thread.sleep(500);
-                } catch (Exception e) {
+                } catch (InterruptedException e) {
                 }
             }
             executeWindowsBatchCommand.click();
@@ -175,6 +189,6 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
         } catch (UnhandledAlertException uae) {
             uae.printStackTrace();
         }
-        return new FreestylePropertiesPage(wd);
+        return this;
     }
 }

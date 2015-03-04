@@ -1,6 +1,7 @@
 package utils;
 
-import static utils.Generators.*;
+import static utils.Generators.getExistingProjectName;
+import static utils.Generators.getExistingUserName;
 
 public class PagesURLs {
 

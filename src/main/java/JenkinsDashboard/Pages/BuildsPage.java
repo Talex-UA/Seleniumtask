@@ -1,15 +1,12 @@
 package JenkinsDashboard.Pages;
 
+import org.hamcrest.Matchers;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import org.hamcrest.Matchers;
-import org.junit.Assert;
-
 import static org.hamcrest.MatcherAssert.assertThat;
-import static utils.Generators.*;
-import static utils.PagesURLs.*;
+import static utils.Generators.getExistingProjectName;
 
 public class BuildsPage extends SecuredPage<BuildsPage>{
 
@@ -30,9 +27,17 @@ public class BuildsPage extends SecuredPage<BuildsPage>{
         super(wd, b);
     }
 
+    public String getProjectName() {
+        return getExistingProjectName();
+    }
+
+    public String getBuildNumber() {
+        return "1";
+    }
+
     @Override
     public String getPageURL() {
-        return BUILDS_PAGE;
+        return HOST + "job/"+getProjectName().replace(" ","%20")+"/"+getBuildNumber()+"/";
     }
 
     @Override

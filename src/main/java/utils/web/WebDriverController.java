@@ -1,10 +1,5 @@
 package utils.web;
 
-import org.openqa.selenium.support.events.EventFiringWebDriver;
-import utils.Browser;
-import utils.Highlighter;
-import utils.Language;
-import utils.OSUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +14,11 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.internal.ElementScrollBehavior;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.events.EventFiringWebDriver;
+import utils.Browser;
+import utils.Highlighter;
+import utils.Language;
+import utils.OSUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -117,7 +117,7 @@ public final class WebDriverController {
         wd.manage().window().maximize();
         if (Highlighter.getHighlighter().toString().equals("ON")){
             EventFiringWebDriver driver = new EventFiringWebDriver(wd);
-            driver.register(new ListenerThatHiglilightsElements());
+            driver.register(new ListenerThatHiglightsElements());
             return driver;
         }
         return wd;
