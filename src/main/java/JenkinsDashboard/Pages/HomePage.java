@@ -30,12 +30,13 @@ public class HomePage extends Page<HomePage>{
 
     @Override
     public String getPageURL() {
-        return String.format("%s",HOST);
+//        return String.format("%s",HOST);
+        return HOST;
     }
 
     @Override
     protected void checkUniqueElements() throws NoSuchElementException {
-        Assert.assertThat(logIn.getAttribute("href"), Matchers.containsString("login"));
+        Assert.assertThat(jenkinsIcon.isDisplayed(), Matchers.is(true));
     }
 
     public SignUpPage gotoSignUpPage(){

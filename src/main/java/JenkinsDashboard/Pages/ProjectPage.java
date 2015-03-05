@@ -102,15 +102,4 @@ public class ProjectPage extends SecuredPage<ProjectPage> {
         }
         return this;
     }
-
-    public BuildsPage waitForBuildToEnd(){
-        BuildsPage buildsPage=openLatestBuild();
-        while (!buildsPage.getConsoleOutputText().contains("SUCCESS")){
-            try {
-                Thread.sleep(500);
-            }
-            catch (InterruptedException e){}
-        }
-        return new BuildsPage(wd, true);
-    }
 }

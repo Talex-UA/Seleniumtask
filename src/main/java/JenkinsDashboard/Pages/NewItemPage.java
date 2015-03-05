@@ -5,8 +5,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import static utils.PagesURLs.NEW_ITEM_PAGE;
-
 /**
     *This class is the same as NewItemPage, but extended from SecuredPage abstract class.
  */
@@ -31,7 +29,7 @@ public class NewItemPage extends SecuredPage<NewItemPage> {
 
     @Override
     public String getPageURL() {
-        return NEW_ITEM_PAGE;
+        return HOST + "view/All/newJob";
     }
 
     @Override

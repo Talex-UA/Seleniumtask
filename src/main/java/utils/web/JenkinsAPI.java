@@ -28,16 +28,17 @@ public class JenkinsAPI{
      */
     public void sendPostRequest(String projectName, String actionTrigger) {
 
-        String finalURL="";
+        String project=projectName.replaceAll("\\s+","%20");
+        String finalURL="http://seltr-kbp1-1.synapse.com:8080/job/"+project;
 
         if (actionTrigger.equals("build")){
-            finalURL = "http://seltr-kbp1-1.synapse.com:8080/job/"+projectName.replaceAll("\\s+","%20")+"/build?delay=0sec";
+            finalURL +="/build?delay=0sec";
         } else if(actionTrigger.equals("doDelete")){
-            finalURL = "http://seltr-kbp1-1.synapse.com:8080/job/"+projectName.replaceAll("\\s+","%20")+"/doDelete";
+            finalURL +="/doDelete";
         } else if(actionTrigger.equals("disable")) {
-            finalURL = "http://seltr-kbp1-1.synapse.com:8080/job/"+projectName.replaceAll("\\s+","%20")+"/disable";
+            finalURL +="/disable";
         } else if(actionTrigger.equals("enable")) {
-            finalURL = "http://seltr-kbp1-1.synapse.com:8080/job/"+projectName.replaceAll("\\s+","%20")+"/enable";
+            finalURL +="/enable";
         } else {
             log.info("Wrong trigger: "+actionTrigger);
             return;

@@ -8,11 +8,15 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.openqa.selenium.ie.InternetExplorerDriver;
 import utils.web.JenkinsAPI;
 
+import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static utils.Browser.IE;
+import static utils.Browser.getCurrentBrowser;
 import static utils.CommonMethods.getIPfromPingGoogle;
 import static utils.Generators.*;
 
@@ -26,14 +30,22 @@ public class MyTests extends BaseTest {
 
     @After
     public void cleanUp() {
-        wd.manage().deleteAllCookies();
-        wd.navigate().refresh();
+        if (getCurrentBrowser().equals(IE)){
+            wd.close();
+            wd = new InternetExplorerDriver();
+        } else{
+            wd.manage().deleteAllCookies();
+            wd.navigate().refresh();
+        }
     }
 
     @AfterClass
     public static void afterCurrentClass() {
         UserHomePage userHomePage = new UserHomePage(wd).get();
         userHomePage.deleteTestProjects();
+        if (getCurrentBrowser().equals(IE)){
+            wd.manage().timeouts().implicitlyWait(300, TimeUnit.MILLISECONDS);
+        }
         userHomePage.deleteTestUsers();
     }
 
@@ -49,8 +61,8 @@ public class MyTests extends BaseTest {
     public void logInWrongCredentials() {
         assertThat(new LogInPage(wd).get()
                         .logInWithWrongCredentials(generateString(10), generateString(7))
-                        .getMainPanelText(),
-                Matchers.containsString("Try again"));
+                        .checkForError(),
+                Matchers.is(true));
     }
 
     @Test
@@ -96,6 +108,7 @@ public class MyTests extends BaseTest {
                 Matchers.containsString("SUCCESS"));
     }
 
+
     @Test
     public void testSearch() {
         assertThat(new HomePage(wd).get()
@@ -127,7 +140,8 @@ public class MyTests extends BaseTest {
         ).start();
 
         assertThat(projectPage.waitForNewBuild(builds)
-                        .waitForBuildToEnd() // To be reworked
+                        .openLatestBuild()
+                        .waitForBuildToEnd()
                         .getConsoleOutputText(),
                 Matchers.containsString(getIPfromPingGoogle()));
     }

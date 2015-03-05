@@ -8,19 +8,19 @@ import utils.web.JenkinsAPI;
 import java.util.ArrayList;
 import java.util.List;
 
-import static utils.PagesURLs.USER_HOME_PAGE;
-
 public class UserHomePage extends SecuredPage<UserHomePage> {
 
-    @FindBy(css = ".icon-new-package.icon-md") // css = ".icon-new-package.icon-md"    xpath = "//*[@id='tasks']/div[1]/a[2]"
+    @FindBy(css = ".icon-new-package.icon-md")
+    // css = ".icon-new-package.icon-md"    xpath = "//*[@id='tasks']/div[1]/a[2]"
     private WebElement newItem;
 
-    @FindBy (css = ".icon-user.icon-md") // css = ".icon-user.icon-md"  xpath = "//*[@id='tasks']/div[2]/a[2]"
+    @FindBy(css = ".icon-user.icon-md") // css = ".icon-user.icon-md"  xpath = "//*[@id='tasks']/div[2]/a[2]"
     private WebElement peoplePage;
 
-    @FindBy(css = ".model-link.inside.inverse>b") // css = ".model-link.inside.inverse>b"     xpath = "//*[@id='header']/div[2]/span/a[1]/b"
+    @FindBy(css = ".model-link.inside.inverse>b")
+    // css = ".model-link.inside.inverse>b"     xpath = "//*[@id='header']/div[2]/span/a[1]/b"
     private WebElement userName;
-    @FindBys({@FindBy(xpath = "//td[3]/a")}) // xpath = "//td[3]/a"    className = "model-link"
+    @FindBy(xpath = "//td[3]/a") // xpath = "//td[3]/a"    className = "model-link"
     private List<WebElement> projects;
 
     public UserHomePage(WebDriver wd) {
@@ -33,7 +33,7 @@ public class UserHomePage extends SecuredPage<UserHomePage> {
 
     @Override
     public String getPageURL() {
-            return USER_HOME_PAGE;
+        return HOST;
     }
 
     @Override
@@ -52,19 +52,18 @@ public class UserHomePage extends SecuredPage<UserHomePage> {
     }
 
     public ProjectPage openProject(String projectName) {
-        try {
-            projects.stream().filter(project -> project.getText().equals(projectName)).forEach(a -> a.click());
-        } catch (StaleElementReferenceException e){
-
+        for (WebElement project : projects) {
+            if (project.getText().equals(projectName)) {
+                project.click();
+                break;
+            }
         }
-
-//        for (WebElement project : projects) {
-//            if (project.getText().equals(projectName)) {
-//                project.click();
-//                break;
-//            }
-//        }
-        return new ProjectPage(wd, true);
+        return new ProjectPage(wd, true){
+            @Override
+            public String getProjectName(){
+                return projectName;
+            }
+        };
     }
 
     public String getUserName() {
@@ -79,10 +78,10 @@ public class UserHomePage extends SecuredPage<UserHomePage> {
         return projectNames;
     }
 
-    public List<String> getProjectsNamesByTemplate(String template){
+    public List<String> getProjectsNamesByTemplate(String template) {
         List<String> projectNames = new ArrayList<>();
         for (WebElement project : projects) {
-            if (project.getText().contains(template)){
+            if (project.getText().contains(template)) {
                 projectNames.add(project.getText());
             }
         }
@@ -96,15 +95,15 @@ public class UserHomePage extends SecuredPage<UserHomePage> {
         }
     }
 
-    public void deleteTestUsers(){
+    public void deleteTestUsers() {
         PeoplePage peoplePage = new PeoplePage(wd).get();
         peoplePage.deleteTestUsers();
     }
 
-    public UserHomePage openTab(String tabName){
+    public UserHomePage openTab(String tabName) {
         try {
-            wd.findElement(By.cssSelector(".tab>a[href*="+tabName+"]")).click();
-        } catch (NoSuchElementException e){
+            wd.findElement(By.cssSelector(".tab>a[href*=" + tabName + "]")).click();
+        } catch (NoSuchElementException e) {
 
         }
         return new UserHomePage(wd, true);

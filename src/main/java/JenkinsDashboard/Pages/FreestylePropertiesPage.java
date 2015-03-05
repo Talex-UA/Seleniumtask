@@ -1,10 +1,7 @@
 package JenkinsDashboard.Pages;
 
 import org.hamcrest.Matchers;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.UnhandledAlertException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
 
@@ -31,7 +28,7 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
     @FindBy(id = "cb9")
     private WebElement executeConcurrentBuildsIfNecessary;
 
-    @FindBys({@FindBy(className = "radio-block-control")})
+    @FindBy (className = "radio-block-control")
     private List<WebElement> sourceCodeManagement;
 
     @FindBy(name = "pseudoRemoteTrigger")//id = "cb18"
@@ -49,13 +46,13 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
     @FindBy(id = "cb21")
     private WebElement pollSCM;
 
-    @FindBy(id = "yui-gen30-button")
+    @FindBy(css = ".yui-submit-button")
     private WebElement saveButton;
 
-    @FindBy(id = "yui-gen3-button")
+    @FindBy(css = "[suffix=builder]")
     private WebElement addBuildStepButton;
 
-    @FindBy(id = "yui-gen32")
+    @FindBy(css = ".first-of-type [index='0']")
     private WebElement executeWindowsBatchCommand;
 
     @FindBy(name = "command")
@@ -187,7 +184,6 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
                 }
             }
         } catch (UnhandledAlertException uae) {
-            uae.printStackTrace();
         }
         return this;
     }

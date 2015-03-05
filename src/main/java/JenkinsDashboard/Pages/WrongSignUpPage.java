@@ -4,8 +4,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import static utils.PagesURLs.WRONG_SIGNUP_PAGE;
-
 public class WrongSignUpPage extends Page<SignUpPage> {
 
     @FindBy(className = "error")
@@ -21,7 +19,7 @@ public class WrongSignUpPage extends Page<SignUpPage> {
 
     @Override
     public String getPageURL() {
-        return WRONG_SIGNUP_PAGE;
+        return HOST + "securityRealm/createAccount";
     }
 
     @Override
@@ -29,11 +27,11 @@ public class WrongSignUpPage extends Page<SignUpPage> {
         errorMessage.isDisplayed();
     }
 
-    public String getErrorMessage(){
+    public String getErrorMessage() {
         return errorMessage.getText();
     }
 
-    public String getErrorClass(){
+    public String getErrorClass() {
         return errorMessage.getAttribute("class");
     }
 }

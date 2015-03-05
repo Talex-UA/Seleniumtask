@@ -6,6 +6,11 @@ import java.util.Random;
 
 public class Generators {
 
+    private static String googleIP = "173.194.113.201";
+
+    public static String getGoogleIP(){
+        return googleIP;
+    }
     public static String getExistingUserName(){
         return "OleksandrA";
     }
@@ -15,10 +20,10 @@ public class Generators {
     public static String getExistingUserFulName(){
         return "Alexander Agafonov";
     }
+
     public static String getExistingProjectName(){
         return "ExistingProject";
     }
-
     public static String generateNewUserName(){
         return "Test-Name "+generateTimeAndDate();
     }
@@ -28,6 +33,7 @@ public class Generators {
     public static String generateNewUserEmail(){
         return "test_email"+generateTimeAndDate()+"@testemail.com";
     }
+
     public static String generateNewProjectName(){
         return "Test-Project "+generateTimeAndDate();
     }
@@ -41,7 +47,7 @@ public class Generators {
     }
 
     public static String getBatchCommand(){
-        return "ping 173.194.113.201 -w 1 -n 10";
+        return "ping " + getGoogleIP() + " -w 1 -n 10";
     }
 
     public static String generateString(int length) {

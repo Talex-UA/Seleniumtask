@@ -5,7 +5,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import static utils.CommonMethods.sendKeysToField;
-import static utils.PagesURLs.LOG_IN_PAGE;
 
 public class LogInPage extends Page<LogInPage>{
 
@@ -33,7 +32,7 @@ public class LogInPage extends Page<LogInPage>{
 
     @Override
     public String getPageURL() {
-        return LOG_IN_PAGE;
+        return HOST + "login?from=%2F";
     }
 
     @Override

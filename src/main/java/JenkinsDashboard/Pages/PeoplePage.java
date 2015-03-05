@@ -9,8 +9,6 @@ import org.openqa.selenium.support.FindBy;
 import java.util.ArrayList;
 import java.util.List;
 
-import static utils.PagesURLs.PEOPLE_PAGE;
-
 public class PeoplePage extends SecuredPage<PeoplePage> {
 
     @FindBy(name = "User" ) // this name is given to needed elements by givePeopleElementsID method. original locators: css = "#people td:nth-of-type(2)>a"   xpath = "//td[2]/a"
@@ -47,7 +45,7 @@ public class PeoplePage extends SecuredPage<PeoplePage> {
 
     @Override
     public String getPageURL() {
-        return PEOPLE_PAGE;
+        return  HOST +"asynchPeople/";
     }
 
     @Override

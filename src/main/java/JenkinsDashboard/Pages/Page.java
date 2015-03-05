@@ -113,7 +113,7 @@ public abstract class Page<T extends Page<T>> extends LoadableComponent<T> {
             Assert.assertThat("Wrong page URL", wd.getCurrentUrl(), Matchers.equalToIgnoringCase(getPageURL()));
             checkUniqueElements();
         } catch (NoSuchElementException e) {
-            throw new Error();
+            throw new Error(e.getMessage());
         }
     }
 }

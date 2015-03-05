@@ -6,35 +6,35 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import static utils.CommonMethods.sendKeysToField;
-import static utils.PagesURLs.SIGN_UP_PAGE;
 
-public class SignUpPage extends Page<SignUpPage>{
+public class SignUpPage extends Page<SignUpPage> {
 
-    @FindBy (name = "username")
+    @FindBy(name = "username")
     private WebElement usernameField;
 
-    @FindBy (name = "password1")
+    @FindBy(name = "password1")
     private WebElement passwordField;
 
-    @FindBy (name = "password2")
+    @FindBy(name = "password2")
     private WebElement confirm_password;
 
-    @FindBy (name = "fullname")
+    @FindBy(name = "fullname")
     private WebElement fullnameField;
 
-    @FindBy (name = "email")
+    @FindBy(name = "email")
     private WebElement emailField;
 
-    @FindBy (id = "yui-gen1-button")
+    @FindBy(id = "yui-gen1-button")
     private WebElement signUpButton;
 
-    @FindBy (css = "#main-panel-content>div>a") // css = "#main-panel-content>div>a"    xpath = "//*[@id='main-panel-content']/div/a"
+    @FindBy(css = "#main-panel-content>div>a")
+    // css = "#main-panel-content>div>a"    xpath = "//*[@id='main-panel-content']/div/a"
     private WebElement gotoTopPage;
 
-    @FindBy (id = "main-panel-content")
+    @FindBy(id = "main-panel-content")
     private WebElement mainPanel;
 
-    public SignUpPage(WebDriver wd){
+    public SignUpPage(WebDriver wd) {
         super(wd);
     }
 
@@ -49,7 +49,7 @@ public class SignUpPage extends Page<SignUpPage>{
 
     @Override
     public String getPageURL() {
-        return SIGN_UP_PAGE;
+        return HOST + "signup";
     }
 
     @Override
@@ -57,7 +57,7 @@ public class SignUpPage extends Page<SignUpPage>{
         confirm_password.isDisplayed();
     }
 
-    public UserHomePage signUpNewUser(String userName, String password, String fullName, String email){
+    public UserHomePage signUpNewUser(String userName, String password, String fullName, String email) {
         sendKeysToField(usernameField, userName);
         sendKeysToField(passwordField, password);
         sendKeysToField(confirm_password, password);
@@ -68,7 +68,7 @@ public class SignUpPage extends Page<SignUpPage>{
         return new UserHomePage(wd, true);
     }
 
-    public WrongSignUpPage signUpExistingNameUser(String userName, String password, String fullName, String email){
+    public WrongSignUpPage signUpExistingNameUser(String userName, String password, String fullName, String email) {
         sendKeysToField(usernameField, userName);
         sendKeysToField(passwordField, password);
         sendKeysToField(confirm_password, password);
@@ -78,7 +78,7 @@ public class SignUpPage extends Page<SignUpPage>{
         return new WrongSignUpPage(wd, true);
     }
 
-    public String getMainPanelText(){
+    public String getMainPanelText() {
         return mainPanel.getText();
     }
 

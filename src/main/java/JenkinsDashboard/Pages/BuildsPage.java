@@ -59,4 +59,14 @@ public class BuildsPage extends SecuredPage<BuildsPage>{
         backToProject.click();
         return new ProjectPage(wd, true);
     }
+
+    public BuildsPage waitForBuildToEnd(){
+        while (!getConsoleOutputText().contains("SUCCESS")){
+            try {
+                Thread.sleep(500);
+            }
+            catch (InterruptedException e){}
+        }
+        return this;
+    }
 }
