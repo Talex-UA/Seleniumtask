@@ -5,9 +5,13 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class PeoplePage extends SecuredPage<PeoplePage> {
 
@@ -45,13 +49,18 @@ public class PeoplePage extends SecuredPage<PeoplePage> {
     }
 
     public List<WebElement> getPeople() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         giveTestElementsName();
         return new ArrayList<>(testUsers);
     }
 
     @Override
     public String getPageURL() {
-        return HOST + "view/Training/asynchPeople/";
+        return HOST + "asynchPeople/";
     }
 
     @Override
@@ -59,34 +68,11 @@ public class PeoplePage extends SecuredPage<PeoplePage> {
         mainPanel.getText().contains("Includes all known “users”");
     }
 
-    public List<String> getPeopleNameByTemplate(String template) {
-        List<String> peopleNames = new ArrayList<>();
-        getPeople().stream()
-                .filter(currentName -> currentName.getText().contains(template))
-                .forEach(name -> peopleNames.add(name.getText()));
-        return peopleNames;
-    }
-
-    public void deleteTestUsers() {
-        //        for (WebElement currentName:getPeople()){
-//            if (currentName.getText().contains("Test-Name")){
-//                currentName.click();
-//                UserPage userPage = new UserPage(wd, true) {
-//                    @Override
-//                    public String getUserName() {
-//                        return currentName.getText();
-//                    }
-//                };
-//                userPage.deleteUserAndReturnToPeoplePage();
-//                showAllPeople();
-//            }
-        for (String currentName:getPeopleNameByTemplate("Test-Name ")){
-            openUser(currentName).deleteUserAndReturnToPeoplePage().showAllPeople();
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+    public void deleteTestUsers(){
+        List<String> namesList=getPeople().stream().map(WebElement::getText).collect(Collectors.toList());
+        for (String current:namesList){
+            openUser(current).deleteUser();
+            PeoplePage peoplePage = new PeoplePage(wd).get();
         }
     }
 

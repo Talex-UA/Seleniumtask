@@ -1,9 +1,11 @@
 package JenkinsDashboard.Pages;
 
+import org.hamcrest.Matchers;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static utils.Generators.getExistingUserName;
 
 public class UserPage extends SecuredPage<UserPage>{
@@ -36,7 +38,7 @@ public class UserPage extends SecuredPage<UserPage>{
 
     @Override
     protected void checkUniqueElements() throws Error {
-        deleteUser.isDisplayed();
+        assertThat(deleteUser.isDisplayed(), Matchers.is(true));
     }
 
     public PeoplePage deleteUserAndReturnToPeoplePage() {
@@ -44,5 +46,10 @@ public class UserPage extends SecuredPage<UserPage>{
         yesButton.click();
         goToPeoplePage.click();
         return new PeoplePage(wd, true).get();
+    }
+
+    public void deleteUser(){
+        deleteUser.click();
+        yesButton.click();
     }
 }

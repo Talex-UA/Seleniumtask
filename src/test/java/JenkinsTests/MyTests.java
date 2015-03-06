@@ -11,7 +11,6 @@ import org.junit.runners.JUnit4;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import utils.web.JenkinsAPI;
 
-import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -43,18 +42,8 @@ public class MyTests extends BaseTest {
     public static void afterCurrentClass() {
         UserHomePage userHomePage = new UserHomePage(wd).get();
         userHomePage.deleteTestProjects();
-//        if (getCurrentBrowser().equals(IE)){
-//            wd.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
-//        }
-        userHomePage.deleteTestUsers();
+        new PeoplePage(wd).get().deleteTestUsers();
     }
-
-//    @Test
-//    public void deleteAfter(){
-////        for (int i = 0; i < 5; i++) {
-////            signUpNewUserTest();
-////        }
-//    }
 
     @Test
     public void logInTest() {
