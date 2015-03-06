@@ -37,7 +37,7 @@ public class BuildsPage extends SecuredPage<BuildsPage>{
 
     @Override
     public String getPageURL() {
-        return HOST + "job/"+getProjectName().replace(" ","%20")+"/"+getBuildNumber()+"/";
+        return HOST + "view/All/job/"+getProjectName().replace(" ","%20")+"/"+getBuildNumber()+"/";
     }
 
     @Override

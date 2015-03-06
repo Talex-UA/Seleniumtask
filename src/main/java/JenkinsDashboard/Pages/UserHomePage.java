@@ -1,8 +1,10 @@
 package JenkinsDashboard.Pages;
 
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.FindBys;
 import utils.web.JenkinsAPI;
 
 import java.util.ArrayList;
@@ -89,6 +91,7 @@ public class UserHomePage extends SecuredPage<UserHomePage> {
     }
 
     public void deleteTestProjects() {
+        openTab("All");
         List<String> projects = getProjectsNamesByTemplate("Test-Project ");
         for (String project : projects) {
             new JenkinsAPI().sendPostRequest(project, "doDelete");
@@ -96,7 +99,12 @@ public class UserHomePage extends SecuredPage<UserHomePage> {
     }
 
     public void deleteTestUsers() {
-        PeoplePage peoplePage = new PeoplePage(wd).get();
+        PeoplePage peoplePage = new PeoplePage(wd){
+            @Override
+            public String getPageURL() {
+                return HOST + "asynchPeople/";
+            }
+        }.get();
         peoplePage.deleteTestUsers();
     }
 
@@ -106,7 +114,7 @@ public class UserHomePage extends SecuredPage<UserHomePage> {
         } catch (NoSuchElementException e) {
 
         }
-        return new UserHomePage(wd, true);
+        return this;
     }
 
     public String getPageTitle() {

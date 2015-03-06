@@ -50,7 +50,7 @@ public class ProjectPage extends SecuredPage<ProjectPage> {
 
     @Override
     public String getPageURL() {
-        return HOST + "job/"+ getProjectName().replace(" ","%20").toLowerCase() + "/";
+        return HOST + "view/All/job/"+ getProjectName().replace(" ","%20").toLowerCase() + "/";
     }
 
     @Override

@@ -43,11 +43,18 @@ public class MyTests extends BaseTest {
     public static void afterCurrentClass() {
         UserHomePage userHomePage = new UserHomePage(wd).get();
         userHomePage.deleteTestProjects();
-        if (getCurrentBrowser().equals(IE)){
-            wd.manage().timeouts().implicitlyWait(300, TimeUnit.MILLISECONDS);
-        }
+//        if (getCurrentBrowser().equals(IE)){
+//            wd.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
+//        }
         userHomePage.deleteTestUsers();
     }
+
+//    @Test
+//    public void deleteAfter(){
+////        for (int i = 0; i < 5; i++) {
+////            signUpNewUserTest();
+////        }
+//    }
 
     @Test
     public void logInTest() {
@@ -83,6 +90,7 @@ public class MyTests extends BaseTest {
     @Test
     public void openExistingProject() {
         assertThat("Project not found", new UserHomePage(wd).get()
+                        .openTab("All")
                         .openProject(getExistingProjectName())
                         .getMainPanelText(),
                 Matchers.containsString(getExistingProjectName()));
@@ -94,7 +102,8 @@ public class MyTests extends BaseTest {
                 .setUpFreestyleProject(newProjectName)
                 .addDescription(generateNewProjectDescription())
                 .save()
-                .backToDashboard();
+                .backToDashboard()
+                .openTab("All");
 
         assertThat("Project is not found", userHomePage.getProjectsNames().stream().anyMatch(Predicate.isEqual(newProjectName)), Matchers.is(true));
     }

@@ -1,9 +1,11 @@
 package JenkinsDashboard.Pages;
 
 import org.hamcrest.Matchers;
-import org.openqa.selenium.*;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.UnhandledAlertException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.FindBys;
 
 import java.util.List;
 
@@ -72,7 +74,7 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
 
     @Override
     public String getPageURL() {
-        return HOST + "job/" + getProjectName().replace(" ", "%20") + "/configure";
+        return HOST + "view/All/job/" + getProjectName().replace(" ", "%20") + "/configure";
     }
 
     @Override
@@ -151,7 +153,6 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
 
     public ProjectPage save() {
         saveButton.click();
-        System.out.println(FreestylePropertiesPage.this.getProjectName());
         return new ProjectPage(wd, true) {
             @Override
             public String getProjectName() {

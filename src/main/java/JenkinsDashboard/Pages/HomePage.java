@@ -30,8 +30,7 @@ public class HomePage extends Page<HomePage>{
 
     @Override
     public String getPageURL() {
-//        return String.format("%s",HOST);
-        return HOST;
+        return String.format("%s",HOST);
     }
 
     @Override
