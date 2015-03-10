@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import utils.OSUtils;
 import utils.web.JenkinsAPI;
 
 import java.util.function.Predicate;
@@ -30,15 +31,16 @@ public class MyTests extends BaseTest {
 
     @After
     public void cleanUp() {
-        if (getCurrentBrowser().equals(IE)){
+        if (getCurrentBrowser().equals(IE)) {
             wd.close();
             wd = new InternetExplorerDriver();
-        } else{
+        } else {
             wd.manage().deleteAllCookies();
             wd.navigate().refresh();
             try {
                 wd.switchTo().alert().dismiss();
-            } catch (NoAlertPresentException e){}
+            } catch (NoAlertPresentException e) {
+            }
         }
     }
 
@@ -47,6 +49,9 @@ public class MyTests extends BaseTest {
         UserHomePage userHomePage = new UserHomePage(wd).get();
         userHomePage.deleteTestProjects();
         new PeoplePage(wd).get().deleteTestUsers();
+        if (getCurrentBrowser().equals(IE)) {
+            OSUtils.killProcess("iexplore.exe");
+        }
     }
 
     @Test
