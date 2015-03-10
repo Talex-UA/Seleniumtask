@@ -24,7 +24,7 @@ public class SignUpPage extends Page<SignUpPage> {
     @FindBy(name = "email")
     private WebElement emailField;
 
-    @FindBy(id = "yui-gen1-button")
+    @FindBy(css = "#main-panel-content [type=button]") // css = "#main-panel-content [type=button]"    id = "yui-gen1-button"
     private WebElement signUpButton;
 
     @FindBy(css = "#main-panel-content>div>a")
