@@ -1,14 +1,19 @@
 package JenkinsDashboard.Pages;
 
+import org.hamcrest.Matchers;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.web.JenkinsAPI;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class UserHomePage extends SecuredPage<UserHomePage> {
 
@@ -16,7 +21,7 @@ public class UserHomePage extends SecuredPage<UserHomePage> {
     // css = ".icon-new-package.icon-md"    xpath = "//*[@id='tasks']/div[1]/a[2]"
     private WebElement newItem;
 
-    @FindBy(css = ".icon-user.icon-md") // css = ".icon-user.icon-md"  xpath = "//*[@id='tasks']/div[2]/a[2]"
+    @FindBy(css = ".task [href*='asynch']") // css = ".icon-user.icon-md"  xpath = "//*[@id='tasks']/div[2]/a[2]"
     private WebElement peoplePage;
 
     @FindBy(css = ".model-link.inside.inverse>b")
@@ -40,7 +45,7 @@ public class UserHomePage extends SecuredPage<UserHomePage> {
 
     @Override
     protected void checkUniqueElements() throws Error {
-        peoplePage.isDisplayed();
+        assertThat(peoplePage.isDisplayed(), Matchers.is(true));
     }
 
     public UserHomePage gotoUserHomePage() {
@@ -111,8 +116,14 @@ public class UserHomePage extends SecuredPage<UserHomePage> {
     public UserHomePage openTab(String tabName) {
         try {
             wd.findElement(By.cssSelector(".tab>a[href*=" + tabName + "]")).click();
+            WebElement passwordField = (new WebDriverWait(wd, 20)).until(new ExpectedCondition<WebElement>() {
+                @Override
+                public WebElement apply(WebDriver d) {
+                    return d.findElement(By.cssSelector(".tab.active>a[href*=" + tabName + "]"));
+                }
+            });
         } catch (NoSuchElementException e) {
-
+            log.info("No such tab");
         }
         return this;
     }

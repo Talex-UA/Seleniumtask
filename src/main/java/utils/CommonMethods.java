@@ -21,6 +21,7 @@ public class CommonMethods {
             if (input.isEmpty()) {
                 element.clear();
             } else {
+                element.clear();
                 element.sendKeys(input);
             }
         }

@@ -24,7 +24,7 @@ public class ProjectPage extends SecuredPage<ProjectPage> {
     @FindBy(css = ".icon-clock.icon-md") // css = ".icon-clock.icon-md" xpath = "//*[@id='tasks']/div[5]/a[2]"
     private WebElement buildNow;
 
-    @FindBy(css = ".icon-up.icon-md") // css = ".icon-up.icon-md"  xpath = "//*[@id='tasks']/div[1]/a[2]"
+    @FindBy(css = "#tasks [href='/']") // css = ".icon-up.icon-md"  xpath = "//*[@id='tasks']/div[1]/a[2]"
     private WebElement backToDashBoard;
 
     @FindBy(id = "main-panel-content")

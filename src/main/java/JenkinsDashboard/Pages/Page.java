@@ -14,8 +14,11 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.LoadableComponent;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import utils.Browser;
 
 import java.util.List;
+
+import static utils.CommonMethods.sendKeysToField;
 
 public abstract class Page<T extends Page<T>> extends LoadableComponent<T> {
 
@@ -49,14 +52,18 @@ public abstract class Page<T extends Page<T>> extends LoadableComponent<T> {
 
     public List<WebElement> search(String pattern) {
         Actions actions = new Actions(wd);
-        actions.moveToElement(searchBox)
-                .click()
-                .sendKeys(searchBox, pattern)
-                .clickAndHold(searchBox)
-                .perform();
+            sendKeysToField(searchBox, pattern);
+            actions.moveToElement(searchBox)
+                    .clickAndHold(searchBox)
+                    .perform();
+
+        String search_cssSelector;
+        if (Browser.getCurrentBrowser()==Browser.FIREFOX){
+            search_cssSelector=".yui-ac-bd [style='']";
+        } else {search_cssSelector=".yui-ac-bd li:not([style]";}
 
         List<WebElement> elements = new WebDriverWait(wd, 5, MY_CUSTOM_SLEEP)
-                .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(".yui-ac-bd li:not([style])")));
+                .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(search_cssSelector)));
         actions.release(searchBox).perform();
         return elements;
     }

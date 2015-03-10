@@ -1,23 +1,26 @@
 package JenkinsDashboard.Pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static utils.CommonMethods.sendKeysToField;
 
-public class LogInPage extends Page<LogInPage>{
+public class LogInPage extends Page<LogInPage> {
 
-    @FindBy (name = "j_username")
+    @FindBy(id = "j_username")
     private WebElement username;
 
-    @FindBy (name = "j_password")
+    @FindBy(id = "j_password")
     private WebElement passwordField;
 
-    @FindBy (id="yui-gen1-button")
+    @FindBy(css = "#main-panel-content [type=button]") // css = "#main-panel-content [type=button]" id = "yui-gen1-button"
     private WebElement logInButton;
 
-    public LogInPage(WebDriver wd){
+    public LogInPage(WebDriver wd) {
         super(wd);
     }
 
@@ -40,17 +43,31 @@ public class LogInPage extends Page<LogInPage>{
         logInButton.isDisplayed();
     }
 
-    public UserHomePage logIn(String userName, String password){
-        sendKeysToField(username, userName);
-        sendKeysToField(passwordField, password);
-        logInButton.click();
+    public UserHomePage logIn(String userName, String password) {
+        loginWithoutReturn(userName, password);
         return new UserHomePage(wd, true);
     }
 
-    public WrongLogInPage logInWithWrongCredentials(String userName, String password){
-        sendKeysToField(username, userName);
-        sendKeysToField(passwordField,password);
-        logInButton.click();
+    public WrongLogInPage logInWithWrongCredentials(String userName, String password) {
+        loginWithoutReturn(userName, password);
         return new WrongLogInPage(wd, true);
+    }
+
+    public void loginWithoutReturn(String userName, String password) {
+        WebElement username = (new WebDriverWait(wd, 20)).until(new ExpectedCondition<WebElement>() {
+            @Override
+            public WebElement apply(WebDriver d) {
+                return d.findElement(By.name("j_username"));
+            }
+        });
+        sendKeysToField(username, userName);
+        WebElement passwordField = (new WebDriverWait(wd, 20)).until(new ExpectedCondition<WebElement>() {
+            @Override
+            public WebElement apply(WebDriver d) {
+                return d.findElement(By.name("j_password"));
+            }
+        });
+        sendKeysToField(passwordField, password);
+        logInButton.click();
     }
 }

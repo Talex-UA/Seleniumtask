@@ -46,9 +46,11 @@ public abstract class SecuredPage<T extends SecuredPage<T>> extends Page<T> {
     }
 
     protected void login() {
+        goToLoginPage().loginWithoutReturn(getExistingUserName(), getPassword());
+    }
+
+    private LogInPage goToLoginPage() {
         logIn.click();
-        username.sendKeys(getExistingUserName());
-        password.sendKeys(getPassword());
-        logInButton.click();
+        return new LogInPage(wd);
     }
 }

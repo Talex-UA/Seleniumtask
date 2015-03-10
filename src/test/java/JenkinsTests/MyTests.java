@@ -8,6 +8,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import utils.web.JenkinsAPI;
 
@@ -35,6 +36,9 @@ public class MyTests extends BaseTest {
         } else{
             wd.manage().deleteAllCookies();
             wd.navigate().refresh();
+            try {
+                wd.switchTo().alert().dismiss();
+            } catch (NoAlertPresentException e){}
         }
     }
 
@@ -105,7 +109,6 @@ public class MyTests extends BaseTest {
                         .getConsoleOutputText(),
                 Matchers.containsString("SUCCESS"));
     }
-
 
     @Test
     public void testSearch() {
