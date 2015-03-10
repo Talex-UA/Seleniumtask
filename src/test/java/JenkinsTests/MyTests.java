@@ -50,6 +50,7 @@ public class MyTests extends BaseTest {
         userHomePage.deleteTestProjects();
         new PeoplePage(wd).get().deleteTestUsers();
         if (getCurrentBrowser().equals(IE)) {
+            OSUtils.killProcess("IEDriverServer.exe");
             OSUtils.killProcess("iexplore.exe");
         }
     }
