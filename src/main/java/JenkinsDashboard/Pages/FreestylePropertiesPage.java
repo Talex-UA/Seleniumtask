@@ -173,7 +173,7 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
         addBuildStepButton.click();
 
         for (WebElement currentElement:getDropDowList()){
-            if (currentElement.getText().contains("Execute Windows")){
+            if (currentElement.getText().contains("Windows")){
                 currentElement.click();
                 break;
             }

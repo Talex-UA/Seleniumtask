@@ -83,6 +83,9 @@
             <resource>
                 <directory>drivers</directory>
             </resource>
+            <resource>
+                <directory>src/main/resources/</directory>
+            </resource>
         </resources>
 
         <plugins>
@@ -91,8 +94,8 @@
                 <version>${surefire.plugin.version}</version>
                 <configuration>
                     <systemPropertyVariables>
-                        <browser>chrome</browser>
-                        <lang>en</lang>
+                        <browser>firefox</browser>
+                        <lang>ru</lang>
                         <log4j.configurationFile>file:///${basedir}/log4j.xml</log4j.configurationFile>
                         <highlighter>off</highlighter>
                     </systemPropertyVariables>
