@@ -172,11 +172,17 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
 
     public FreestylePropertiesPage addWindowsBatchCommand() {
         try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            ((JavascriptExecutor) wd)
+                    .executeScript(
+                            "arguments[0].scrollIntoView(true);",
+                            addBuildStepButton.getLocation().y);
+
+            addBuildStepButton.click();
+        } catch (Exception e) {
+// System.out.println("No clickable");
         }
-        addBuildStepButton.click();
+
+//    addBuildStepButton.click();
 
         for (WebElement currentElement:getDropDowList()){
             if (currentElement.getText().contains("Windows")){
