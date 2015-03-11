@@ -90,6 +90,7 @@ public class BaseTest {
                 base.evaluate();
             }
             catch (Throwable t) {
+                log.error("Error in: " + d);
                 takeScreenshot(d.getMethodName());
                 throw t;
             }

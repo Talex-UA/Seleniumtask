@@ -43,6 +43,7 @@ public abstract class Page<T extends Page<T>> extends LoadableComponent<T> {
     }
 
     protected Page(WebDriver wd, boolean ifToCheck) {
+        log.info("Going to: " + getPageURL());
         this.wd = wd;
         PageFactory.initElements(wd, this);
         if (ifToCheck) {
