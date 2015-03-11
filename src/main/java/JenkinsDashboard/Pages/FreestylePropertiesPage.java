@@ -182,6 +182,7 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
 // System.out.println("No clickable");
         }
 
+        System.out.println("I'm here");
 //    addBuildStepButton.click();
 
         for (WebElement currentElement:getDropDowList()){
