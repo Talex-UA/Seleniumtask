@@ -175,7 +175,7 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
             ((JavascriptExecutor) wd)
                     .executeScript(
                             "arguments[0].scrollIntoView(true);",
-                            addBuildStepButton.getLocation().y);
+                            addBuildStepButton);
 
             addBuildStepButton.click();
         } catch (Exception e) {
