@@ -30,6 +30,9 @@ public class UserHomePage extends SecuredPage<UserHomePage> {
     @FindBy(xpath = "//td[3]/a") // xpath = "//td[3]/a"    className = "model-link"
     private List<WebElement> projects;
 
+    @FindBy (css = ".tab>a[href*=All]")
+    private WebElement tabAll;
+
     public UserHomePage(WebDriver wd) {
         super(wd);
     }
@@ -45,7 +48,7 @@ public class UserHomePage extends SecuredPage<UserHomePage> {
 
     @Override
     protected void checkUniqueElements() throws Error {
-        assertThat(peoplePage.isDisplayed(), Matchers.is(true));
+        assertThat(tabAll.isDisplayed(), Matchers.is(true));
     }
 
     public UserHomePage gotoUserHomePage() {
