@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.web.JenkinsAPI;
 
@@ -48,6 +49,8 @@ public class UserHomePage extends SecuredPage<UserHomePage> {
 
     @Override
     protected void checkUniqueElements() throws Error {
+        new WebDriverWait(wd, 5)
+                .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(".task [href*='asynch'] img")));
         assertThat(tabAll.isDisplayed(), Matchers.is(true));
     }
 
