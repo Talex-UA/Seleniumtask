@@ -2,6 +2,7 @@ package JenkinsDashboard.Pages;
 
 import org.hamcrest.Matchers;
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -170,6 +171,11 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
     }
 
     public FreestylePropertiesPage addWindowsBatchCommand() {
+        Actions actions = new Actions(wd);
+        actions.keyDown(Keys.CONTROL)
+                .sendKeys(Keys.END)
+                .keyUp(Keys.CONTROL)
+                .perform();
         addBuildStepButton.click();
 
         for (WebElement currentElement:getDropDowList()){
@@ -190,3 +196,5 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
         return this;
     }
 }
+//Actions actions = new Actions(wd);
+//actions.keyDown(Keys.CONTROL).sendKeys(Keys.END).perform();

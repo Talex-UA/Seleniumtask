@@ -94,7 +94,7 @@
                 <version>${surefire.plugin.version}</version>
                 <configuration>
                     <systemPropertyVariables>
-                        <browser>firefox</browser>
+                        <browser>chrome</browser>
                         <lang>ru</lang>
                         <log4j.configurationFile>file:///${basedir}/log4j.xml</log4j.configurationFile>
                         <highlighter>off</highlighter>
