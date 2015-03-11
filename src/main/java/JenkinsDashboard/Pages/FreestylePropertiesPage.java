@@ -1,20 +1,22 @@
 package JenkinsDashboard.Pages;
 
 import org.hamcrest.Matchers;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.UnhandledAlertException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static utils.CommonMethods.sendKeysToField;
 import static utils.Generators.*;
 
 public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage> {
 
-    @FindBy(css = "#main-panel-content>form>table>tbody>tr>td>textarea")
+    @FindBy(name = "description")
     // css = "#main-panel-content>form>table>tbody>tr>td>textarea" xpath = "//*[@id='main-panel-content']/form/table/tbody/tr[3]/td[3]/textarea"
     private WebElement description;
 
@@ -30,7 +32,7 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
     @FindBy(id = "cb9")
     private WebElement executeConcurrentBuildsIfNecessary;
 
-    @FindBy (className = "radio-block-control")
+    @FindBy(className = "radio-block-control")
     private List<WebElement> sourceCodeManagement;
 
     @FindBy(name = "pseudoRemoteTrigger")//id = "cb18"
@@ -54,8 +56,8 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
     @FindBy(css = "[suffix=builder]")
     private WebElement addBuildStepButton;
 
-    @FindBy(css = ".first-of-type [index='0']")
-    private WebElement executeWindowsBatchCommand;
+    @FindBy(css = ".first-of-type")
+    private List<WebElement> anyDropDownList;
 
     @FindBy(name = "command")
     private WebElement command;
@@ -80,6 +82,12 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
     @Override
     protected void checkUniqueElements() throws NoSuchElementException {
         assertThat(description.isDisplayed(), Matchers.is(true));
+    }
+
+    private List<WebElement> getDropDowList(){
+
+        List<WebElement> dropDown = wd.findElements(By.cssSelector(".first-of-type li"));
+        return dropDown;
     }
 
     public FreestylePropertiesPage addDescription(String stringDescription) {
@@ -162,30 +170,23 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
     }
 
     public FreestylePropertiesPage addWindowsBatchCommand() {
-        try {
-            addBuildStepButton.click();
-            while (!executeWindowsBatchCommand.isDisplayed()) {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                }
-            }
-            executeWindowsBatchCommand.click();
+        addBuildStepButton.click();
 
-            boolean isDisplayed = false;
-            while (!isDisplayed) {
-                try {
-                    command.sendKeys(getBatchCommand());
-                    isDisplayed = true;
-                } catch (NoSuchElementException e) {
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException ie) {
-                    }
-                }
+        for (WebElement currentElement:getDropDowList()){
+            if (currentElement.getText().contains("Execute Windows")){
+                currentElement.click();
+                break;
             }
-        } catch (UnhandledAlertException uae) {
         }
+
+        WebElement command = (new WebDriverWait(wd, 20)).until(new ExpectedCondition<WebElement>() {
+            @Override
+            public WebElement apply(WebDriver d) {
+                return d.findElement(By.xpath("//textarea[@name='command']"));
+            }
+        });
+
+        sendKeysToField(command, getBatchCommand());
         return this;
     }
 }

@@ -13,6 +13,7 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import utils.Browser;
+import utils.OSUtils;
 import utils.web.WebDriverController;
 
 import java.io.File;
@@ -24,6 +25,9 @@ import java.nio.file.StandardCopyOption;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+
+import static utils.Browser.IE;
+import static utils.Browser.getCurrentBrowser;
 
 public class BaseTest {
 
@@ -101,6 +105,10 @@ public class BaseTest {
     public static void afterClass() {
         if (wd != null) {
             wd.quit();
+        }
+        if (getCurrentBrowser().equals(IE)) {
+            OSUtils.killProcess("IEDriverServer.exe");
+            OSUtils.killProcess("iexplore.exe");
         }
     }
 
