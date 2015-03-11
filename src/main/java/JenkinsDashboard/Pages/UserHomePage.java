@@ -21,7 +21,7 @@ public class UserHomePage extends SecuredPage<UserHomePage> {
     // css = ".icon-new-package.icon-md"    xpath = "//*[@id='tasks']/div[1]/a[2]"
     private WebElement newItem;
 
-    @FindBy(css = ".task [href*='asynch']") // css = ".icon-user.icon-md"  xpath = "//*[@id='tasks']/div[2]/a[2]"
+    @FindBy(css = ".task [href*='asynch'] img") // css = ".icon-user.icon-md"  xpath = "//*[@id='tasks']/div[2]/a[2]"
     private WebElement peoplePage;
 
     @FindBy(css = ".model-link.inside.inverse>b")
