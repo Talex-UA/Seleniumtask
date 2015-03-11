@@ -171,11 +171,11 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
     }
 
     public FreestylePropertiesPage addWindowsBatchCommand() {
-        JavascriptExecutor jse = (JavascriptExecutor)wd;
-        jse.executeScript("window.scrollTo(0,Math.max(document.documentElement.scrollHeight,document.body.scrollHeight,document.documentElement.clientHeight));");
-//        addBuildStepButton.click();
+//        JavascriptExecutor jse = (JavascriptExecutor)wd;
+//        jse.executeScript("window.scrollTo(0,Math.max(document.documentElement.scrollHeight,document.body.scrollHeight,document.documentElement.clientHeight));");
+        new WebDriverWait(wd, 10).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[suffix=builder]")));
+        addBuildStepButton.click();
 
-        wd.findElement(By.cssSelector("[suffix=builder]")).click();
         for (WebElement currentElement:getDropDowList()){
             if (currentElement.getText().contains("Windows")){
                 currentElement.click();
