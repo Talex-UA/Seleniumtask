@@ -171,11 +171,8 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
     }
 
     public FreestylePropertiesPage addWindowsBatchCommand() {
-        Actions actions = new Actions(wd);
-        actions.keyDown(Keys.CONTROL)
-                .sendKeys(Keys.END)
-                .keyUp(Keys.CONTROL)
-                .perform();
+        new WebDriverWait(wd, 5)
+                .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector("[suffix=builder]")));
         addBuildStepButton.click();
 
         for (WebElement currentElement:getDropDowList()){
