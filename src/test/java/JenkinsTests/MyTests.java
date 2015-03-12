@@ -126,6 +126,7 @@ public class MyTests extends BaseTest {
                 Matchers.containsString(getExistingProjectName()));
     }
 
+    @Ignore
     @Test
     public void testNewProjectWithPing() {
         ProjectPage projectPage = new NewItemPage(wd).get()
