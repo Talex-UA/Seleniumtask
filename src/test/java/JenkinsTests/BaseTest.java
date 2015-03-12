@@ -91,7 +91,12 @@ public class BaseTest {
             }
             catch (Throwable t) {
                 takeScreenshot(d.getMethodName());
-                throw t;
+                if (t.getMessage().contains("Element is not clickable at point")){
+                    wd.close();
+                    wd = WebDriverController.getDriver();
+                } else {
+                    throw t;
+                }
             }
         }
     };
