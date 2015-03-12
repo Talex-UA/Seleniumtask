@@ -94,9 +94,8 @@ public class BaseTest {
                 if (t.getMessage().contains("Element is not clickable at point")){
                     wd.close();
                     wd = WebDriverController.getDriver();
-                } else {
-                    throw t;
                 }
+                throw t;
             }
         }
     };
