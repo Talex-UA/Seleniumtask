@@ -85,7 +85,7 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
         assertThat(description.isDisplayed(), Matchers.is(true));
     }
 
-    private List<WebElement> getDropDowList(){
+    private List<WebElement> getDropDowList() {
 
         List<WebElement> dropDown = wd.findElements(By.cssSelector(".first-of-type li"));
         return dropDown;
@@ -171,22 +171,13 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
     }
 
     public FreestylePropertiesPage addWindowsBatchCommand() {
-        try {
-            ((JavascriptExecutor) wd)
-                    .executeScript(
-                            "arguments[0].scrollIntoView(true);",
-                            addBuildStepButton);
 
-            addBuildStepButton.click();
-        } catch (Exception e) {
-// System.out.println("No clickable");
-        }
+        Actions actions = new Actions(wd);
+        actions.moveToElement(addBuildStepButton,0,20).click().perform();
+//        addBuildStepButton.click();
 
-        log.info("I'm here");
-//    addBuildStepButton.click();
-
-        for (WebElement currentElement:getDropDowList()){
-            if (currentElement.getText().contains("Windows")){
+        for (WebElement currentElement : getDropDowList()) {
+            if (currentElement.getText().contains("Windows")) {
                 currentElement.click();
                 break;
             }
