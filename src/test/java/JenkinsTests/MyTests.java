@@ -131,7 +131,6 @@ public class MyTests extends BaseTest {
         ProjectPage projectPage = new NewItemPage(wd).get()
                 .setUpFreestyleProject(newProjectName)
                 .addDescription(generateNewProjectDescription())
-                .checkTriggerBuildsRemotely()
                 .addWindowsBatchCommand()
                 .save();
 
