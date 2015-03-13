@@ -171,6 +171,9 @@ public class FreestylePropertiesPage extends SecuredPage<FreestylePropertiesPage
     }
 
     public FreestylePropertiesPage addWindowsBatchCommand() {
+        JavascriptExecutor jse = (JavascriptExecutor)wd;
+        jse.executeScript("window.scrollTo(0,Math.max(document.documentElement.scrollHeight,document.body.scrollHeight,document.documentElement.clientHeight));");
+
         addBuildStepButton.click();
 
         for (WebElement currentElement:getDropDowList()){
